@@ -1,0 +1,264 @@
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
+
+part 'match.g.dart';
+
+@JsonSerializable()
+class Match extends Equatable {
+  final String id;
+  final String battingTeamId;
+  final String bowlingTeamId;
+  final int totalOvers;
+  final String status;
+  final DateTime startTime;
+  final DateTime? endTime;
+  final MatchScore battingTeamScore;
+  final MatchScore bowlingTeamScore;
+  final List<BallEvent> ballEvents;
+  final String? winnerTeamId;
+  final String? winReason;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  const Match({
+    required this.id,
+    required this.battingTeamId,
+    required this.bowlingTeamId,
+    required this.totalOvers,
+    required this.status,
+    required this.startTime,
+    this.endTime,
+    required this.battingTeamScore,
+    required this.bowlingTeamScore,
+    required this.ballEvents,
+    this.winnerTeamId,
+    this.winReason,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Match.create({
+    required String battingTeamId,
+    required String bowlingTeamId,
+    required int totalOvers,
+  }) {
+    final now = DateTime.now();
+    return Match(
+      id: const Uuid().v4(),
+      battingTeamId: battingTeamId,
+      bowlingTeamId: bowlingTeamId,
+      totalOvers: totalOvers,
+      status: 'in_progress',
+      startTime: now,
+      battingTeamScore: MatchScore.create(),
+      bowlingTeamScore: MatchScore.create(),
+      ballEvents: [],
+      createdAt: now,
+      updatedAt: now,
+    );
+  }
+
+  factory Match.fromJson(Map<String, dynamic> json) => _$MatchFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MatchToJson(this);
+
+  Match copyWith({
+    String? id,
+    String? battingTeamId,
+    String? bowlingTeamId,
+    int? totalOvers,
+    String? status,
+    DateTime? startTime,
+    DateTime? endTime,
+    MatchScore? battingTeamScore,
+    MatchScore? bowlingTeamScore,
+    List<BallEvent>? ballEvents,
+    String? winnerTeamId,
+    String? winReason,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Match(
+      id: id ?? this.id,
+      battingTeamId: battingTeamId ?? this.battingTeamId,
+      bowlingTeamId: bowlingTeamId ?? this.bowlingTeamId,
+      totalOvers: totalOvers ?? this.totalOvers,
+      status: status ?? this.status,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      battingTeamScore: battingTeamScore ?? this.battingTeamScore,
+      bowlingTeamScore: bowlingTeamScore ?? this.bowlingTeamScore,
+      ballEvents: ballEvents ?? this.ballEvents,
+      winnerTeamId: winnerTeamId ?? this.winnerTeamId,
+      winReason: winReason ?? this.winReason,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  Match addBallEvent(BallEvent event) {
+    return copyWith(
+      ballEvents: [...ballEvents, event],
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  Match undoLastBallEvent() {
+    if (ballEvents.isEmpty) return this;
+    return copyWith(
+      ballEvents: ballEvents.take(ballEvents.length - 1).toList(),
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  Match completeMatch({
+    required String winnerTeamId,
+    required String winReason,
+  }) {
+    return copyWith(
+      status: 'completed',
+      endTime: DateTime.now(),
+      winnerTeamId: winnerTeamId,
+      winReason: winReason,
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  bool get isCompleted => status == 'completed';
+  bool get isInProgress => status == 'in_progress';
+
+  @override
+  List<Object?> get props => [
+    id,
+    battingTeamId,
+    bowlingTeamId,
+    totalOvers,
+    status,
+    startTime,
+    endTime,
+    battingTeamScore,
+    bowlingTeamScore,
+    ballEvents,
+    winnerTeamId,
+    winReason,
+    createdAt,
+    updatedAt,
+  ];
+}
+
+@JsonSerializable()
+class MatchScore extends Equatable {
+  final int runs;
+  final int wickets;
+  final double overs;
+  final int extras;
+  final double runRate;
+
+  const MatchScore({
+    required this.runs,
+    required this.wickets,
+    required this.overs,
+    required this.extras,
+    required this.runRate,
+  });
+
+  factory MatchScore.create() {
+    return const MatchScore(
+      runs: 0,
+      wickets: 0,
+      overs: 0.0,
+      extras: 0,
+      runRate: 0.0,
+    );
+  }
+
+  factory MatchScore.fromJson(Map<String, dynamic> json) =>
+      _$MatchScoreFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MatchScoreToJson(this);
+
+  MatchScore copyWith({
+    int? runs,
+    int? wickets,
+    double? overs,
+    int? extras,
+    double? runRate,
+  }) {
+    return MatchScore(
+      runs: runs ?? this.runs,
+      wickets: wickets ?? this.wickets,
+      overs: overs ?? this.overs,
+      extras: extras ?? this.extras,
+      runRate: runRate ?? this.runRate,
+    );
+  }
+
+  @override
+  List<Object?> get props => [runs, wickets, overs, extras, runRate];
+}
+
+@JsonSerializable()
+class BallEvent extends Equatable {
+  final String id;
+  final int ballNumber;
+  final int runs;
+  final String ballType;
+  final String? batsmanId;
+  final String? bowlerId;
+  final bool isWicket;
+  final String? wicketType;
+  final DateTime timestamp;
+
+  const BallEvent({
+    required this.id,
+    required this.ballNumber,
+    required this.runs,
+    required this.ballType,
+    this.batsmanId,
+    this.bowlerId,
+    required this.isWicket,
+    this.wicketType,
+    required this.timestamp,
+  });
+
+  factory BallEvent.create({
+    required int ballNumber,
+    required int runs,
+    required String ballType,
+    String? batsmanId,
+    String? bowlerId,
+    bool isWicket = false,
+    String? wicketType,
+  }) {
+    return BallEvent(
+      id: const Uuid().v4(),
+      ballNumber: ballNumber,
+      runs: runs,
+      ballType: ballType,
+      batsmanId: batsmanId,
+      bowlerId: bowlerId,
+      isWicket: isWicket,
+      wicketType: wicketType,
+      timestamp: DateTime.now(),
+    );
+  }
+
+  factory BallEvent.fromJson(Map<String, dynamic> json) =>
+      _$BallEventFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BallEventToJson(this);
+
+  @override
+  List<Object?> get props => [
+    id,
+    ballNumber,
+    runs,
+    ballType,
+    batsmanId,
+    bowlerId,
+    isWicket,
+    wicketType,
+    timestamp,
+  ];
+}
