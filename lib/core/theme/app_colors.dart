@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Yolo247 Brand Colors
-  static const Color primary = Color(0xFF1B5E20); // Dark Green
-  static const Color primaryLight = Color(0xFF4CAF50); // Light Green
+  static const Color primary = Color(0xFF242E38); // Dark Green
+  static const Color primaryLight = Color(0xFF242E38); // Light Green
   static const Color primaryDark = Color(0xFF0D3B0F); // Darker Green
 
   // Secondary Colors
-  static const Color secondary = Color(0xFFFFD700); // Gold
+  static const Color secondary = Color(0xFF242E38); // Gold
   static const Color secondaryLight = Color(0xFFFFF176); // Light Gold
   static const Color secondaryDark = Color(0xFFF57F17); // Dark Gold
 
@@ -16,8 +16,8 @@ class AppColors {
   static const Color accentDark = Color(0xFFC8E6C9); // Medium Green Background
 
   // Cricket Field Colors
-  static const Color fieldGreen = Color(0xFF2E7D32); // Cricket Field Green
-  static const Color fieldLight = Color(0xFF66BB6A); // Light Field Green
+  static const Color fieldGreen = Color(0xFF242E38); // Cricket Field Green
+  static const Color fieldLight = Color(0xFF242E38); // Light Field Green
   static const Color fieldDark = Color(0xFF1B5E20); // Dark Field Green
 
   // Text Colors
@@ -72,5 +72,11 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [Color(0xFF6272DB), Color(0xFF3B4AA2)],
+  );
+
+  static const LinearGradient mainGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF242E38), Color(0xFF080209)],
   );
 }

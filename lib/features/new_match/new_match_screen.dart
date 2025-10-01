@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/widgets/app_buttons.dart';
 
-import '../../core/bloc/app_bloc.dart';
-import '../../core/bloc/app_bloc_impl.dart';
-import '../../core/bloc/app_state.dart';
-import '../../core/constants/app_constants.dart';
-import '../../core/models/team.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_fonts.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_text_field.dart';
 
 class NewMatchScreen extends StatefulWidget {
   const NewMatchScreen({super.key});
@@ -18,283 +13,185 @@ class NewMatchScreen extends StatefulWidget {
 }
 
 class _NewMatchScreenState extends State<NewMatchScreen> {
-  String? _selectedBattingTeamId;
-  String? _selectedBowlingTeamId;
-  int _totalOvers = 20;
+  String? _selectedBattingTeam;
+  String? _selectedBowlingTeam;
   final TextEditingController _oversController = TextEditingController(
     text: '20',
   );
+  bool _isMenuOpen = false;
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<AppBloc>().add(LoadTeams());
-  }
-
-  @override
-  void dispose() {
-    _oversController.dispose();
-    super.dispose();
-  }
+  final List<String> _teams = ['Team A', 'Team B', 'Team C', 'Team D'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppTexts.newMatch),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: BlocConsumer<AppBloc, AppState>(
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: AppColors.error,
-              ),
-            );
-            context.read<AppBloc>().add(ClearError());
-          }
-        },
-        builder: (context, state) {
-          return Container(
-            decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
-            child: SafeArea(
-              child: Padding(
-                padding: AppConstants.defaultPadding,
-                child: Column(
-                  children: [
-                    // Header
-                    _buildHeader(),
-
-                    SizedBox(height: AppConstants.largeSpacing),
-
-                    // Form
-                    Expanded(child: _buildForm(state)),
-
-                    SizedBox(height: AppConstants.largeSpacing),
-
-                    // Start Match Button
-                    _buildStartMatchButton(state),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
-      decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
-      ),
-      child: Column(
+      body: Stack(
         children: [
-          Icon(Icons.sports_cricket, size: 48.w, color: AppColors.primary),
-          SizedBox(height: AppConstants.mediumSpacing),
-          Text(
-            'Setup New Match',
-            style: AppFonts.headline5.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: AppFonts.bold,
+          // Background
+          Container(
+            decoration: const BoxDecoration(gradient: AppColors.mainGradient),
+          ),
+
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // AppBar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: AppColors.textWhite,
+                        ),
+                      ),
+                      Text(
+                        'New Match',
+                        style: TextStyle(
+                          color: AppColors.textWhite,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () =>
+                            setState(() => _isMenuOpen = !_isMenuOpen),
+                        icon: const Icon(
+                          Icons.menu,
+                          color: AppColors.textWhite,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 30.h),
+
+                  _buildLabel('Select Batting Team:'),
+                  SizedBox(height: 8.h),
+                  _buildDropdown(
+                    hint: 'Choose a team...',
+                    value: _selectedBattingTeam,
+                    onChanged: (v) => setState(() => _selectedBattingTeam = v),
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  _buildLabel('Select Bowling Team:'),
+                  SizedBox(height: 8.h),
+                  _buildDropdown(
+                    hint: 'Choose a team...',
+                    value: _selectedBowlingTeam,
+                    onChanged: (v) => setState(() => _selectedBowlingTeam = v),
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  _buildLabel('Number of Overs:'),
+                  SizedBox(height: 8.h),
+                  AppTextField(
+                    controller: _oversController,
+                    hintText: 'e.g. 20',
+                    keyboardType: TextInputType.number,
+                  ),
+
+                  const Spacer(),
+                  AppButton(text: 'Start Match', onPressed: () {}),
+                ],
+              ),
             ),
           ),
-          SizedBox(height: AppConstants.smallSpacing),
-          Text(
-            'Select teams and configure match parameters',
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
-            textAlign: TextAlign.center,
-          ),
+
+          if (_isMenuOpen) _buildMenu(),
         ],
       ),
     );
   }
 
-  Widget _buildForm(AppState state) {
-    return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
-      decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Batting Team
-          Text(
-            AppTexts.battingTeam,
-            style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: AppFonts.semiBold,
-            ),
-          ),
-          SizedBox(height: AppConstants.smallSpacing),
-          _buildTeamDropdown(
-            value: _selectedBattingTeamId,
-            teams: state.teams,
-            onChanged: (value) {
-              setState(() {
-                _selectedBattingTeamId = value;
-              });
-            },
-            hint: 'Select batting team',
-          ),
+  Widget _buildLabel(String text) => Text(
+    text,
+    style: const TextStyle(
+      color: AppColors.textWhite,
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+    ),
+  );
 
-          SizedBox(height: AppConstants.largeSpacing),
-
-          // Bowling Team
-          Text(
-            AppTexts.bowlingTeam,
-            style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: AppFonts.semiBold,
-            ),
-          ),
-          SizedBox(height: AppConstants.smallSpacing),
-          _buildTeamDropdown(
-            value: _selectedBowlingTeamId,
-            teams: state.teams,
-            onChanged: (value) {
-              setState(() {
-                _selectedBowlingTeamId = value;
-              });
-            },
-            hint: 'Select bowling team',
-          ),
-
-          SizedBox(height: AppConstants.largeSpacing),
-
-          // Overs
-          Text(
-            AppTexts.overs,
-            style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: AppFonts.semiBold,
-            ),
-          ),
-          SizedBox(height: AppConstants.smallSpacing),
-          TextFormField(
-            controller: _oversController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'Enter number of overs',
-              suffixText: 'overs',
-            ),
-            onChanged: (value) {
-              setState(() {
-                _totalOvers = int.tryParse(value) ?? 20;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTeamDropdown({
-    required String? value,
-    required List<Team> teams,
-    required ValueChanged<String?> onChanged,
+  Widget _buildDropdown({
     required String hint,
+    required String? value,
+    required ValueChanged<String?> onChanged,
   }) {
-    return DropdownButtonFormField<String>(
-      value: value,
-      decoration: InputDecoration(hintText: hint),
-      items: teams.map((team) {
-        return DropdownMenuItem<String>(
-          value: team.id,
-          child: Row(
-            children: [
-              Icon(Icons.groups, size: 20.w, color: AppColors.primary),
-              SizedBox(width: AppConstants.smallSpacing),
-              Text(team.name),
-            ],
-          ),
-        );
-      }).toList(),
-      onChanged: onChanged,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: DropdownButtonFormField<String>(
+        value: value,
+        dropdownColor: AppColors.surface,
+        decoration: const InputDecoration(border: InputBorder.none),
+        hint: Text(
+          hint,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
+        style: const TextStyle(color: AppColors.textWhite),
+        iconEnabledColor: AppColors.textSecondary,
+        items: _teams
+            .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+            .toList(),
+        onChanged: onChanged,
+      ),
     );
   }
 
-  Widget _buildStartMatchButton(AppState state) {
-    final bool canStart =
-        _selectedBattingTeamId != null &&
-        _selectedBowlingTeamId != null &&
-        _selectedBattingTeamId != _selectedBowlingTeamId &&
-        _totalOvers > 0;
-
-    return SizedBox(
-      width: double.infinity,
-      height: 56.h,
-      child: ElevatedButton(
-        onPressed: canStart && !state.isLoading
-            ? () {
-                context.read<AppBloc>().add(
-                  StartNewMatch(
-                    battingTeamId: _selectedBattingTeamId!,
-                    bowlingTeamId: _selectedBowlingTeamId!,
-                    totalOvers: _totalOvers,
-                  ),
-                );
-                Navigator.pushNamed(
-                  context,
-                  '/match-scoring',
-                  arguments: {'matchId': 'current'},
-                );
-              }
-            : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: canStart
-              ? AppColors.primary
-              : AppColors.buttonDisabled,
-          foregroundColor: AppColors.textWhite,
-          elevation: canStart ? 4 : 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppConstants.largeBorderRadius,
-          ),
+  Widget _buildMenu() {
+    return Positioned(
+      top: 80.h,
+      right: 20.w,
+      child: Container(
+        width: 200.w,
+        decoration: BoxDecoration(
+          color: AppColors.surface.withValues(alpha: 0.95),
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: state.isLoading
-            ? SizedBox(
-                width: 24.w,
-                height: 24.w,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    AppColors.textWhite,
-                  ),
-                ),
-              )
-            : Text(
-                AppTexts.startMatch,
-                style: AppFonts.button.copyWith(
-                  fontSize: AppFonts.fontSize18,
-                  fontWeight: AppFonts.semiBold,
-                ),
-              ),
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _menuItem(Icons.home, 'Home'),
+            _menuItem(Icons.sports_cricket, 'New Match'),
+            _menuItem(Icons.history, 'Match History'),
+            _menuItem(Icons.groups, 'Teams'),
+            _menuItem(Icons.bar_chart, 'Player Stats'),
+            _menuItem(Icons.summarize, 'Match Summary'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _menuItem(IconData icon, String title) {
+    return InkWell(
+      onTap: () {
+        setState(() => _isMenuOpen = false);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$title clicked')));
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        child: Row(
+          children: [
+            Icon(icon, color: AppColors.textWhite, size: 20.w),
+            SizedBox(width: 10.w),
+            Text(title, style: const TextStyle(color: AppColors.textWhite)),
+          ],
+        ),
       ),
     );
   }

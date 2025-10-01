@@ -4,6 +4,9 @@ class AppFonts {
   // Font Family
   static const String primaryFont = 'Roboto';
   static const String secondaryFont = 'OpenSans';
+  static const String interFont = 'Inter';
+  static const String kaushanScriptFont = 'Kaushan Script';
+  static const String afacadFont = 'Afacad';
 
   // Font Sizes
   static const double fontSize8 = 8.0;
@@ -146,5 +149,23 @@ class AppFonts {
     fontSize: fontSize14,
     fontWeight: regular,
     fontFamily: primaryFont,
+  );
+
+  static const TextStyle size20weight500fontInter = TextStyle(
+    fontSize: 20,
+    fontWeight: medium,
+    fontFamily: interFont,
+  );
+
+  static const TextStyle size42weight300fontKaushanScript = TextStyle(
+    fontSize: 42,
+    fontWeight: regular,
+    fontFamily: kaushanScriptFont,
+  );
+
+  static const TextStyle size42weight600fontAfacad = TextStyle(
+    fontSize: 42,
+    fontWeight: semiBold,
+    fontFamily: afacadFont,
   );
 }

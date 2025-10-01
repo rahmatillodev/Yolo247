@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
   final double? borderRadius;
   final double? elevation;
   final Color? shadowColor;
-  final Gradient? gradient; // 🔥 yangi qo‘shildi
+  final Gradient? gradient;
 
   const AppButton({
     super.key,
@@ -28,7 +28,7 @@ class AppButton extends StatelessWidget {
     this.borderRadius,
     this.elevation,
     this.shadowColor,
-    this.gradient, // 🔥
+    this.gradient,
   });
 
   @override
@@ -38,7 +38,8 @@ class AppButton extends StatelessWidget {
       height: 56.h,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: gradient ?? AppColors.welcomeGradient, // 🔥 Gradient foni
+          gradient: gradient ?? AppColors.welcomeGradient,
+          borderRadius: AppConstants.circularBorderRadius,
           boxShadow: [
             BoxShadow(
               color: shadowColor ?? AppColors.shadowDark,
@@ -51,11 +52,8 @@ class AppButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             elevation: 0,
-            backgroundColor: Colors.transparent, // 🔥 gradient ustida
+            backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: AppConstants.circularBorderRadius,
-            ),
           ),
           child: Text(
             text,

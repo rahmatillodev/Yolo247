@@ -17,7 +17,6 @@ class WelcomeScreen extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(Assets.images.welcomeBackground.path, fit: BoxFit.cover),
-          // Container(color: Colors.black.withValues(alpha: 0.45)),
           SafeArea(
             child: Padding(
               padding: AppConstants.defaultPadding,
@@ -28,10 +27,8 @@ class WelcomeScreen extends StatelessWidget {
                   Text(
                         'Welcome to Cricket Score Counter!',
                         textAlign: TextAlign.center,
-                        style: AppFonts.headline2.copyWith(
-                          color: AppColors.textWhite,
-                          fontWeight: AppFonts.bold,
-                        ),
+                        style: AppFonts.size42weight300fontKaushanScript
+                            .copyWith(color: AppColors.textWhite),
                       )
                       .animate()
                       .fadeIn(duration: AppConstants.mediumAnimation)
@@ -40,9 +37,8 @@ class WelcomeScreen extends StatelessWidget {
                   Text(
                         'Track matches, manage teams,\nand keep your cricket scores effortlessly.',
                         textAlign: TextAlign.center,
-                        style: AppFonts.bodyText1.copyWith(
-                          color: AppColors.textWhite.withValues(alpha: 0.9),
-                          height: 1.5,
+                        style: AppFonts.size20weight500fontInter.copyWith(
+                          color: AppColors.textWhite,
                         ),
                       )
                       .animate()
