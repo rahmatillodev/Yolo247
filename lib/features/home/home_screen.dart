@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_fonts.dart';
-import '../../core/constants/app_constants.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,27 +7,77 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
-        child: SafeArea(
-          child: Padding(
-            padding: AppConstants.defaultPadding,
-            child: Column(
-              children: [
-                // Header
-                _buildHeader(context),
+      backgroundColor: const Color(0xFF0A0E27),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header
+              _buildHeader(context),
 
-                SizedBox(height: AppConstants.largeSpacing),
+              SizedBox(height: 20.h),
 
-                // Main Menu
-                Expanded(child: _buildMainMenu(context)),
+              // Hero Section
+              _buildHeroSection(context),
 
-                SizedBox(height: AppConstants.largeSpacing),
+              SizedBox(height: 30.h),
 
-                // Match Summary
-                _buildMatchSummary(context),
-              ],
-            ),
+              // Menu Grid
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: 'New Match',
+                            icon: '🏏',
+                            onTap: () => Navigator.pushNamed(context, '/new-match'),
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: 'Match History',
+                            icon: '📋',
+                            onTap: () => Navigator.pushNamed(context, '/match-history'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: 'Teams',
+                            icon: '👥',
+                            onTap: () => Navigator.pushNamed(context, '/team-management'),
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: 'Player Stats',
+                            icon: '📊',
+                            onTap: () => Navigator.pushNamed(context, '/player-stats'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    _buildMatchSummaryCard(context),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 30.h),
+            ],
           ),
         ),
       ),
@@ -39,233 +85,259 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Logo
-            Row(
-              children: [
-                Container(
-                  width: 50.w,
-                  height: 50.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: AppConstants.circularBorderRadius,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        blurRadius: 10.r,
-                        offset: Offset(0, 5.h),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // App Title
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Cricket ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.sports_cricket,
-                    size: 30.w,
-                    color: AppColors.primary,
+                    ),
+                    TextSpan(
+                      text: 'Score',
+                      style: TextStyle(
+                        color: const Color(0xFFFFA726),
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                'Counter',
+                style: TextStyle(
+                  color: const Color(0xFFE53935),
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+
+          // Settings Icon
+          Container(
+            width: 50.w,
+            height: 50.w,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color: const Color(0xFF5B7FDB),
+                width: 2.5,
+              ),
+            ),
+            child: IconButton(
+              onPressed: () {
+                // TODO: Navigate to settings
+              },
+              icon: Icon(
+                Icons.settings_outlined,
+                size: 28.w,
+                color: const Color(0xFF5B7FDB),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroSection(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.w),
+      height: 280.h,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF1E3A8A),
+            Color(0xFF3B82F6),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24.r),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF3B82F6).withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Background Pattern
+          Positioned(
+            right: -20,
+            top: 20,
+            bottom: 20,
+            child: Opacity(
+              opacity: 0.1,
+              child: Image.asset(
+                'assets/images/cricket_pattern.png',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox(),
+              ),
+            ),
+          ),
+
+          // Content
+          Padding(
+            padding: EdgeInsets.all(30.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Score Every Run.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 36.sp,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
                   ),
                 ),
-                SizedBox(width: AppConstants.mediumSpacing),
+                SizedBox(height: 8.h),
                 Text(
-                  AppTexts.appName,
-                  style: AppFonts.headline5.copyWith(
-                    color: AppColors.textWhite,
-                    fontWeight: AppFonts.bold,
+                  'Track Every Ball.',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/new-match'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF6B7FDB),
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    elevation: 5,
+                  ),
+                  child: Text(
+                    'Start New Match',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
             ),
+          ),
 
-            // Settings Icon
-            Container(
-              width: 50.w,
-              height: 50.w,
-              decoration: BoxDecoration(
-                color: AppColors.surface.withOpacity(0.2),
-                borderRadius: AppConstants.circularBorderRadius,
-                border: Border.all(
-                  color: AppColors.surface.withOpacity(0.3),
-                  width: 1,
-                ),
-              ),
-              child: IconButton(
-                onPressed: () {
-                  // TODO: Navigate to settings
-                },
-                icon: Icon(
-                  Icons.settings,
-                  size: 24.w,
-                  color: AppColors.textWhite,
-                ),
+          // Cricket Player Image (placeholder)
+          Positioned(
+            right: -30.w,
+            bottom: -20.h,
+            child: Opacity(
+              opacity: 0.3,
+              child: Icon(
+                Icons.sports_cricket,
+                size: 200.w,
+                color: Colors.white,
               ),
             ),
-          ],
-        )
-        .animate()
-        .fadeIn(duration: AppConstants.mediumAnimation)
-        .slideY(begin: -0.3, end: 0, duration: AppConstants.mediumAnimation);
-  }
-
-  Widget _buildMainMenu(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: AppConstants.mediumSpacing,
-      mainAxisSpacing: AppConstants.mediumSpacing,
-      childAspectRatio: 1.2,
-      children: [
-        _buildMenuCard(
-          context: context,
-          title: AppTexts.newMatch,
-          icon: Icons.add_circle_outline,
-          color: AppColors.primary,
-          onTap: () => Navigator.pushNamed(context, '/new-match'),
-          delay: const Duration(milliseconds: 100),
-        ),
-        _buildMenuCard(
-          context: context,
-          title: AppTexts.matchHistory,
-          icon: Icons.history,
-          color: AppColors.secondary,
-          onTap: () => Navigator.pushNamed(context, '/match-history'),
-          delay: const Duration(milliseconds: 200),
-        ),
-        _buildMenuCard(
-          context: context,
-          title: AppTexts.teams,
-          icon: Icons.groups,
-          color: AppColors.info,
-          onTap: () => Navigator.pushNamed(context, '/team-management'),
-          delay: const Duration(milliseconds: 300),
-        ),
-        _buildMenuCard(
-          context: context,
-          title: AppTexts.playerStats,
-          icon: Icons.bar_chart,
-          color: AppColors.success,
-          onTap: () => Navigator.pushNamed(context, '/player-stats'),
-          delay: const Duration(milliseconds: 400),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildMenuCard({
     required BuildContext context,
     required String title,
-    required IconData icon,
-    required Color color,
+    required String icon,
     required VoidCallback onTap,
-    required Duration delay,
   }) {
     return GestureDetector(
-          onTap: onTap,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: AppConstants.largeBorderRadius,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.shadowDark,
-                  blurRadius: 15.r,
-                  offset: Offset(0, 8.h),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 60.w,
-                  height: 60.w,
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
-                    borderRadius: AppConstants.circularBorderRadius,
-                  ),
-                  child: Icon(icon, size: 30.w, color: color),
-                ),
-                SizedBox(height: AppConstants.mediumSpacing),
-                Text(
-                  title,
-                  style: AppFonts.subtitle1.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: AppFonts.semiBold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+      onTap: onTap,
+      child: Container(
+        height: 140.h,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1F3A),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: const Color(0xFF2A3050),
+            width: 1.5,
           ),
-        )
-        .animate()
-        .fadeIn(duration: AppConstants.mediumAnimation, delay: delay)
-        .slideY(
-          begin: 0.3,
-          end: 0,
-          duration: AppConstants.mediumAnimation,
-          delay: delay,
-        )
-        .then()
-        .shimmer(
-          duration: AppConstants.longAnimation,
-          color: color.withOpacity(0.3),
-        );
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              icon,
+              style: TextStyle(fontSize: 48.sp),
+            ),
+            SizedBox(height: 12.h),
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _buildMatchSummary(BuildContext context) {
-    return Container(
-          width: double.infinity,
-          padding: AppConstants.defaultPadding,
-          decoration: BoxDecoration(
-            color: AppColors.surface.withOpacity(0.9),
-            borderRadius: AppConstants.largeBorderRadius,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.shadow,
-                blurRadius: 10.r,
-                offset: Offset(0, 5.h),
-              ),
-            ],
+  Widget _buildMatchSummaryCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: Navigate to match summary
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1F3A),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: const Color(0xFF2A3050),
+            width: 1.5,
           ),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.emoji_events,
-                    size: 24.w,
-                    color: AppColors.secondary,
-                  ),
-                  SizedBox(width: AppConstants.smallSpacing),
-                  Text(
-                    AppTexts.matchSummary,
-                    style: AppFonts.subtitle1.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: AppFonts.semiBold,
-                    ),
-                  ),
-                ],
+        ),
+        child: Row(
+          children: [
+            Text(
+              '📋',
+              style: TextStyle(fontSize: 40.sp),
+            ),
+            SizedBox(width: 16.w),
+            Text(
+              'Match Summary',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
               ),
-              SizedBox(height: AppConstants.mediumSpacing),
-              Text(
-                'No completed matches yet.\nStart your first match to see summaries here!',
-                style: AppFonts.bodyText2.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        )
-        .animate()
-        .fadeIn(
-          duration: AppConstants.mediumAnimation,
-          delay: const Duration(milliseconds: 500),
-        )
-        .slideY(
-          begin: 0.3,
-          end: 0,
-          duration: AppConstants.mediumAnimation,
-          delay: const Duration(milliseconds: 500),
-        );
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
