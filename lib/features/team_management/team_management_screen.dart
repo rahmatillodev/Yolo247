@@ -1,72 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../core/bloc/app_state.dart';
+import '../../core/constants/app_constants.dart';
+import '../../core/cubit/app_cubit.dart';
+import '../../core/cubit/theme_cubit.dart';
+import '../../core/models/team.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
-import '../../core/constants/app_constants.dart';
-import '../../core/bloc/app_bloc_impl.dart';
-import '../../core/bloc/app_bloc.dart';
-import '../../core/bloc/app_state.dart';
-import '../../core/models/team.dart';
+import '../../core/widgets/app_app_bar.dart';
 
 class TeamManagementScreen extends StatelessWidget {
   const TeamManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppTexts.teams),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: BlocConsumer<AppBloc, AppState>(
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: AppColors.error,
-              ),
-            );
-            context.read<AppBloc>().add(ClearError());
-          }
-        },
-        builder: (context, state) {
-          return Container(
-            decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
-            child: SafeArea(
-              child: Padding(
-                padding: AppConstants.defaultPadding,
-                child: Column(
-                  children: [
-                    _buildHeader(),
-                    SizedBox(height: AppConstants.largeSpacing),
-                    Expanded(child: _buildTeamList(state.teams, context)),
-                    SizedBox(height: AppConstants.largeSpacing),
-                    _buildAddTeamButton(context),
-                  ],
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark;
+        return Scaffold(
+          backgroundColor: isDark
+              ? AppColors.darkBackground
+              : AppColors.background,
+          appBar: AppAppBar(title: AppTexts.teams),
+          body: BlocConsumer<AppCubit, AppState>(
+            listener: (context, state) {
+              if (state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.errorMessage!),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                context.read<AppCubit>().clearError();
+              }
+              if (state.successMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.successMessage!),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+                context.read<AppCubit>().clearSuccess();
+              }
+            },
+            builder: (context, state) {
+              return SafeArea(
+                child: Padding(
+                  padding: AppConstants.defaultPadding,
+                  child: Column(
+                    children: [
+                      _buildHeader(isDark),
+                      SizedBox(height: AppConstants.largeSpacing),
+                      Expanded(
+                        child: _buildTeamList(state.teams, context, isDark),
+                      ),
+                      SizedBox(height: AppConstants.largeSpacing),
+                      _buildAddTeamButton(context, isDark),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(bool isDark) {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark
+            ? AppColors.darkSurface.withOpacity(0.9)
+            : AppColors.surface.withOpacity(0.9),
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: isDark ? AppColors.shadowDark : AppColors.shadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -79,44 +93,50 @@ class TeamManagementScreen extends StatelessWidget {
           Text(
             AppTexts.teams,
             style: AppFonts.headline5.copyWith(
-              color: AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: AppFonts.bold,
             ),
           ),
           SizedBox(height: AppConstants.smallSpacing),
           Text(
             'Manage your cricket teams',
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
+            style: AppFonts.bodyText2.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTeamList(List<Team> teams, BuildContext context) {
+  Widget _buildTeamList(List<Team> teams, BuildContext context, bool isDark) {
     if (teams.isEmpty) {
-      return _buildEmptyState(context);
+      return _buildEmptyState(context, isDark);
     }
 
     return ListView.builder(
       itemCount: teams.length,
       itemBuilder: (context, index) {
         final team = teams[index];
-        return _buildTeamCard(team, context);
+        return _buildTeamCard(team, context, isDark);
       },
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, bool isDark) {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark
+            ? AppColors.darkSurface.withOpacity(0.9)
+            : AppColors.surface.withOpacity(0.9),
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: isDark ? AppColors.shadowDark : AppColors.shadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -125,16 +145,30 @@ class TeamManagementScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.groups, size: 64.w, color: AppColors.textSecondary),
+          Icon(
+            Icons.groups,
+            size: 64.w,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.textSecondary,
+          ),
           SizedBox(height: AppConstants.largeSpacing),
           Text(
             'No teams yet',
-            style: AppFonts.headline6.copyWith(color: AppColors.textSecondary),
+            style: AppFonts.headline6.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
+            ),
           ),
           SizedBox(height: AppConstants.mediumSpacing),
           Text(
             'Create your first team to get started!',
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
+            style: AppFonts.bodyText2.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -142,16 +176,18 @@ class TeamManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamCard(Team team, BuildContext context) {
+  Widget _buildTeamCard(Team team, BuildContext context, bool isDark) {
     return Container(
       margin: EdgeInsets.only(bottom: AppConstants.mediumSpacing),
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark
+            ? AppColors.darkSurface.withOpacity(0.9)
+            : AppColors.surface.withOpacity(0.9),
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: isDark ? AppColors.shadowDark : AppColors.shadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -168,14 +204,18 @@ class TeamManagementScreen extends StatelessWidget {
                 Text(
                   team.name,
                   style: AppFonts.subtitle1.copyWith(
-                    color: AppColors.textPrimary,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
                     fontWeight: AppFonts.semiBold,
                   ),
                 ),
                 Text(
                   '${team.playerCount} players',
                   style: AppFonts.bodyText2.copyWith(
-                    color: AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -196,7 +236,7 @@ class TeamManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAddTeamButton(BuildContext context) {
+  Widget _buildAddTeamButton(BuildContext context, bool isDark) {
     return SizedBox(
       width: double.infinity,
       height: 56.h,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
-import '../../core/constants/app_constants.dart';
+import '../../core/widgets/app_app_bar.dart';
 
 class PlayerStatsScreen extends StatelessWidget {
   const PlayerStatsScreen({super.key});
@@ -10,25 +12,16 @@ class PlayerStatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppTexts.playerStats),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
-        child: SafeArea(
-          child: Padding(
-            padding: AppConstants.defaultPadding,
-            child: Column(
-              children: [
-                _buildHeader(),
-                SizedBox(height: AppConstants.largeSpacing),
-                Expanded(child: _buildPlayerList()),
-              ],
-            ),
+      appBar: AppAppBar(title: AppTexts.playerStats),
+      body: SafeArea(
+        child: Padding(
+          padding: AppConstants.defaultPadding,
+          child: Column(
+            children: [
+              _buildHeader(),
+              SizedBox(height: AppConstants.largeSpacing),
+              Expanded(child: _buildPlayerList()),
+            ],
           ),
         ),
       ),

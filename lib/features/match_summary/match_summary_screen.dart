@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
-import '../../core/constants/app_constants.dart';
+import '../../core/widgets/app_app_bar.dart';
 
 class MatchSummaryScreen extends StatelessWidget {
   final String? matchId;
@@ -12,15 +14,8 @@ class MatchSummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppTexts.matchSummary),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
+      appBar: AppAppBar(title: AppTexts.matchSummary),
+      body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
             padding: AppConstants.defaultPadding,

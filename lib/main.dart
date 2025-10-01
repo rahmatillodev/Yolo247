@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/bloc/app_bloc_impl.dart';
 import 'package:yolo247/core/routes/app_routes.dart';
 
-import 'core/bloc/app_bloc_impl.dart';
+import 'core/cubit/app_cubit.dart';
+import 'core/cubit/theme_cubit.dart';
 import 'core/theme/app_theme.dart';
 
 void main() {
@@ -20,14 +22,24 @@ class MainApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return BlocProvider(
-          create: (context) => AppBloc(),
-          child: MaterialApp(
-            title: 'Yolo247',
-            theme: AppTheme.lightTheme,
-            debugShowCheckedModeBanner: false,
-            initialRoute: Routes.splash,
-            onGenerateRoute: AppRouter.generateRoute,
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => AppCubit()),
+            BlocProvider(create: (context) => ThemeCubit()),
+            BlocProvider(create: (context) => AppBloc()),
+          ],
+          child: BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              return MaterialApp(
+                title: 'Yolo247 Cricket Score Counter',
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeMode,
+                debugShowCheckedModeBanner: false,
+                initialRoute: Routes.splash,
+                onGenerateRoute: AppRouter.generateRoute,
+              );
+            },
           ),
         );
       },

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/constants/app_constants.dart';
+import '../../core/cubit/theme_cubit.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
+import '../../core/widgets/app_app_bar.dart';
 
 class CreateEditTeamScreen extends StatefulWidget {
   final String? teamId;
@@ -36,45 +39,55 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.teamId == null ? 'Create Team' : 'Edit Team'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
-        child: SafeArea(
-          child: Padding(
-            padding: AppConstants.defaultPadding,
-            child: Column(
-              children: [
-                _buildTeamNameField(),
-                SizedBox(height: AppConstants.largeSpacing),
-                Expanded(child: _buildPlayersList()),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildAddPlayerButton(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildSaveButton(),
-              ],
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark;
+        return Scaffold(
+          backgroundColor: isDark
+              ? AppColors.darkBackground
+              : AppColors.background,
+          appBar: AppAppBar(
+            title: widget.teamId == null ? 'Create Team' : 'Edit Team',
+          ),
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: isDark
+                  ? AppColors.darkGradient
+                  : AppColors.fieldGradient,
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: AppConstants.defaultPadding,
+                child: Column(
+                  children: [
+                    _buildTeamNameField(isDark),
+                    SizedBox(height: AppConstants.largeSpacing),
+                    Expanded(child: _buildPlayersList()),
+                    SizedBox(height: AppConstants.largeSpacing),
+                    _buildAddPlayerButton(),
+                    SizedBox(height: AppConstants.largeSpacing),
+                    _buildSaveButton(),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildTeamNameField() {
+  Widget _buildTeamNameField(bool isDark) {
     return Container(
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark
+            ? AppColors.darkSurface.withOpacity(0.9)
+            : AppColors.surface.withOpacity(0.9),
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: isDark ? AppColors.shadowDark : AppColors.shadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -86,14 +99,24 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
           Text(
             AppTexts.teamName,
             style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: AppFonts.semiBold,
             ),
           ),
           SizedBox(height: AppConstants.smallSpacing),
           TextFormField(
             controller: _teamNameController,
-            decoration: InputDecoration(hintText: 'Enter team name'),
+            style: TextStyle(
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Enter team name',
+              hintStyle: TextStyle(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
+              ),
+            ),
           ),
         ],
       ),

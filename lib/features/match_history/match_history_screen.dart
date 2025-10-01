@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../core/bloc/app_bloc.dart';
+import '../../core/bloc/app_bloc_impl.dart';
+import '../../core/bloc/app_state.dart';
+import '../../core/constants/app_constants.dart';
+import '../../core/models/match.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
-import '../../core/constants/app_constants.dart';
-import '../../core/bloc/app_bloc_impl.dart';
-import '../../core/bloc/app_bloc.dart';
-import '../../core/bloc/app_state.dart';
-import '../../core/models/match.dart';
+import '../../core/widgets/app_app_bar.dart';
 
 class MatchHistoryScreen extends StatelessWidget {
   const MatchHistoryScreen({super.key});
@@ -15,13 +17,7 @@ class MatchHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppTexts.matchHistory),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: AppAppBar(title: AppTexts.matchHistory),
       body: BlocConsumer<AppBloc, AppState>(
         listener: (context, state) {
           if (state.errorMessage != null) {
@@ -36,7 +32,7 @@ class MatchHistoryScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Container(
-            decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
+            // decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
             child: SafeArea(
               child: Padding(
                 padding: AppConstants.defaultPadding,
