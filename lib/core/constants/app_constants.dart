@@ -47,32 +47,6 @@ class AppConstants {
   static const int maxWickets = 10;
   static const int maxRunsPerBall = 6;
   static const int minOvers = 1;
-
-  // Storage Keys
-  static const String teamsKey = 'teams';
-  static const String matchesKey = 'matches';
-  static const String playersKey = 'players';
-  static const String settingsKey = 'settings';
-
-  // Match Status
-  static const String matchStatusNotStarted = 'not_started';
-  static const String matchStatusInProgress = 'in_progress';
-  static const String matchStatusCompleted = 'completed';
-  static const String matchStatusCancelled = 'cancelled';
-
-  // Player Roles
-  static const String playerRoleBatsman = 'batsman';
-  static const String playerRoleBowler = 'bowler';
-  static const String playerRoleAllRounder = 'all_rounder';
-  static const String playerRoleWicketKeeper = 'wicket_keeper';
-
-  // Ball Types
-  static const String ballTypeNormal = 'normal';
-  static const String ballTypeWide = 'wide';
-  static const String ballTypeNoBall = 'no_ball';
-  static const String ballTypeByes = 'byes';
-  static const String ballTypeLegByes = 'leg_byes';
-  static const String ballTypeWicket = 'wicket';
 }
 
 class AppTexts {

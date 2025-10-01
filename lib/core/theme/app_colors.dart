@@ -68,4 +68,9 @@ class AppColors {
     end: Alignment.bottomRight,
     colors: [secondaryLight, secondary],
   );
+  static const LinearGradient welcomeGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF6272DB), Color(0xFF3B4AA2)],
+  );
 }
