@@ -97,17 +97,29 @@ class Match extends Equatable {
     );
   }
 
-  Match addBallEvent(BallEvent event) {
+  bool get isCompleted => status == 'completed';
+  bool get isInProgress => status == 'in_progress';
+
+  Match addBallEvent(BallEvent ballEvent) {
+    final updatedBallEvents = [...ballEvents, ballEvent];
+    final updatedBattingScore = _updateScoreFromBallEvent(ballEvent);
+
     return copyWith(
-      ballEvents: [...ballEvents, event],
+      ballEvents: updatedBallEvents,
+      battingTeamScore: updatedBattingScore,
       updatedAt: DateTime.now(),
     );
   }
 
   Match undoLastBallEvent() {
     if (ballEvents.isEmpty) return this;
+
+    final updatedBallEvents = ballEvents.sublist(0, ballEvents.length - 1);
+    final updatedBattingScore = _recalculateScore(updatedBallEvents);
+
     return copyWith(
-      ballEvents: ballEvents.take(ballEvents.length - 1).toList(),
+      ballEvents: updatedBallEvents,
+      battingTeamScore: updatedBattingScore,
       updatedAt: DateTime.now(),
     );
   }
@@ -125,8 +137,54 @@ class Match extends Equatable {
     );
   }
 
-  bool get isCompleted => status == 'completed';
-  bool get isInProgress => status == 'in_progress';
+  MatchScore _updateScoreFromBallEvent(BallEvent ballEvent) {
+    int newRuns = battingTeamScore.runs + ballEvent.runs;
+    int newWickets = ballEvent.isWicket
+        ? battingTeamScore.wickets + 1
+        : battingTeamScore.wickets;
+    double newOvers = _calculateOvers(ballEvents.length + 1);
+    int newExtras =
+        ballEvent.ballType == 'wide' || ballEvent.ballType == 'no_ball'
+        ? battingTeamScore.extras + 1
+        : battingTeamScore.extras;
+    double newRunRate = newOvers > 0 ? newRuns / newOvers : 0.0;
+
+    return MatchScore(
+      runs: newRuns,
+      wickets: newWickets,
+      overs: newOvers,
+      extras: newExtras,
+      runRate: newRunRate,
+    );
+  }
+
+  MatchScore _recalculateScore(List<BallEvent> events) {
+    int totalRuns = 0;
+    int totalWickets = 0;
+    int totalExtras = 0;
+
+    for (final event in events) {
+      totalRuns += event.runs;
+      if (event.isWicket) totalWickets++;
+      if (event.ballType == 'wide' || event.ballType == 'no_ball')
+        totalExtras++;
+    }
+
+    double overs = _calculateOvers(events.length);
+    double runRate = overs > 0 ? totalRuns / overs : 0.0;
+
+    return MatchScore(
+      runs: totalRuns,
+      wickets: totalWickets,
+      overs: overs,
+      extras: totalExtras,
+      runRate: runRate,
+    );
+  }
+
+  double _calculateOvers(int ballCount) {
+    return ballCount / 6.0;
+  }
 
   @override
   List<Object?> get props => [
