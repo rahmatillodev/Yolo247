@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/cubit/theme_cubit.dart';
 
 import '../../core/bloc/app_bloc.dart';
 import '../../core/bloc/app_bloc_impl.dart';
@@ -16,55 +17,62 @@ class MatchHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppAppBar(title: AppTexts.matchHistory),
-      body: BlocConsumer<AppBloc, AppState>(
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: AppColors.error,
-              ),
-            );
-            context.read<AppBloc>().add(ClearError());
-          }
-        },
-        builder: (context, state) {
-          return Container(
-            // decoration: const BoxDecoration(gradient: AppColors.fieldGradient),
-            child: SafeArea(
-              child: Padding(
-                padding: AppConstants.defaultPadding,
-                child: Column(
-                  children: [
-                    // Header
-                    _buildHeader(),
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark;
+        return Scaffold(
+          backgroundColor: isDark
+              ? AppColors.darkBackground
+              : AppColors.background,
+          appBar: AppAppBar(title: AppTexts.matchHistory),
+          body: BlocConsumer<AppBloc, AppState>(
+            listener: (context, state) {
+              if (state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.errorMessage!),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                context.read<AppBloc>().add(ClearError());
+              }
+            },
+            builder: (context, state) {
+              return SafeArea(
+                child: Padding(
+                  padding: AppConstants.defaultPadding,
+                  child: Column(
+                    children: [
+                      // Header
+                      _buildHeader(isDark),
 
-                    SizedBox(height: AppConstants.largeSpacing),
+                      SizedBox(height: AppConstants.largeSpacing),
 
-                    // Match List
-                    Expanded(child: _buildMatchList(state.matches, context)),
-                  ],
+                      // Match List
+                      Expanded(
+                        child: _buildMatchList(state.matches, context, isDark),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(bool isDark) {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark ? AppColors.darkSurface : AppColors.surface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: isDark ? AppColors.darkShadow : AppColors.shadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -77,7 +85,7 @@ class MatchHistoryScreen extends StatelessWidget {
           Text(
             AppTexts.matchHistory,
             style: AppFonts.headline5.copyWith(
-              color: AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: AppFonts.bold,
             ),
           ),
@@ -91,7 +99,11 @@ class MatchHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMatchList(List<Match> matches, BuildContext context) {
+  Widget _buildMatchList(
+    List<Match> matches,
+    BuildContext context,
+    bool isDark,
+  ) {
     if (matches.isEmpty) {
       return _buildEmptyState(context);
     }
@@ -100,7 +112,7 @@ class MatchHistoryScreen extends StatelessWidget {
       itemCount: matches.length,
       itemBuilder: (context, index) {
         final match = matches[index];
-        return _buildMatchCard(match, context);
+        return _buildMatchCard(match, context, isDark);
       },
     );
   }
@@ -110,7 +122,7 @@ class MatchHistoryScreen extends StatelessWidget {
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: AppColors.darkSurface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
@@ -149,12 +161,12 @@ class MatchHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMatchCard(Match match, BuildContext context) {
+  Widget _buildMatchCard(Match match, BuildContext context, bool isDark) {
     return Container(
       margin: EdgeInsets.only(bottom: AppConstants.mediumSpacing),
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark ? AppColors.darkSurface : AppColors.surface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(

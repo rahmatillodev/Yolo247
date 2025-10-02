@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/cubit/theme_cubit.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
@@ -13,39 +15,47 @@ class MatchSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppAppBar(title: AppTexts.matchSummary),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: AppConstants.defaultPadding,
-            child: Column(
-              children: [
-                _buildMatchResult(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildKeyStats(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildBestPlayers(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildActionButtons(context),
-              ],
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark;
+        return Scaffold(
+          backgroundColor: isDark
+              ? AppColors.darkBackground
+              : AppColors.background,
+          appBar: AppAppBar(title: AppTexts.matchSummary),
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Padding(
+                padding: AppConstants.defaultPadding,
+                child: Column(
+                  children: [
+                    _buildMatchResult(isDark),
+                    SizedBox(height: AppConstants.largeSpacing),
+                    _buildKeyStats(isDark),
+                    SizedBox(height: AppConstants.largeSpacing),
+                    _buildBestPlayers(isDark),
+                    SizedBox(height: AppConstants.largeSpacing),
+                    _buildActionButtons(context),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildMatchResult() {
+  Widget _buildMatchResult(bool isDark) {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark ? AppColors.darkSurface : AppColors.surface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: isDark ? AppColors.darkShadow : AppColors.shadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -58,7 +68,7 @@ class MatchSummaryScreen extends StatelessWidget {
           Text(
             'Team A vs Team B',
             style: AppFonts.headline5.copyWith(
-              color: AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: AppFonts.bold,
             ),
           ),
@@ -80,12 +90,12 @@ class MatchSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildKeyStats() {
+  Widget _buildKeyStats(bool isDark) {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark ? AppColors.darkSurface : AppColors.surface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
@@ -101,7 +111,7 @@ class MatchSummaryScreen extends StatelessWidget {
           Text(
             'Key Statistics',
             style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: AppFonts.semiBold,
             ),
           ),
@@ -109,9 +119,9 @@ class MatchSummaryScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem('Total Overs', '20.0'),
-              _buildStatItem('Extras', '12'),
-              _buildStatItem('Run Rate', '8.75'),
+              _buildStatItem('Total Overs', '20.0', isDark),
+              _buildStatItem('Extras', '12', isDark),
+              _buildStatItem('Run Rate', '8.75', isDark),
             ],
           ),
         ],
@@ -119,12 +129,14 @@ class MatchSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String label, String value) {
+  Widget _buildStatItem(String label, String value, bool isDark) {
     return Column(
       children: [
         Text(
           value,
-          style: AppFonts.statsValue.copyWith(color: AppColors.textPrimary),
+          style: AppFonts.statsValue.copyWith(
+            color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+          ),
         ),
         Text(
           label,
@@ -134,12 +146,12 @@ class MatchSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBestPlayers() {
+  Widget _buildBestPlayers(bool isDark) {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: isDark ? AppColors.darkSurface : AppColors.surface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
@@ -155,7 +167,7 @@ class MatchSummaryScreen extends StatelessWidget {
           Text(
             'Best Players',
             style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: AppFonts.semiBold,
             ),
           ),

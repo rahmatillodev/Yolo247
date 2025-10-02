@@ -6,6 +6,9 @@ import 'package:yolo247/core/cubit/app_cubit.dart';
 import 'package:yolo247/core/cubit/theme_cubit.dart';
 import 'package:yolo247/core/models/team.dart';
 import 'package:yolo247/core/theme/app_colors.dart';
+import 'package:yolo247/core/widgets/app_app_bar.dart';
+
+// Mock data for teams
 
 class NewMatchScreen extends StatefulWidget {
   const NewMatchScreen({super.key});
@@ -21,8 +24,6 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
     text: '20',
   );
 
-  bool _isMenuOpen = false;
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeMode>(
@@ -31,6 +32,7 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
         return BlocBuilder<AppCubit, AppState>(
           builder: (context, state) {
             return Scaffold(
+              appBar: AppAppBar(title: 'New Match', actions: []),
               backgroundColor: isDark
                   ? AppColors.darkBackground
                   : AppColors.background,
@@ -51,45 +53,6 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // AppBar Row
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                onPressed: () => Navigator.pop(context),
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: isDark
-                                      ? AppColors.darkTextPrimary
-                                      : Colors.white,
-                                ),
-                              ),
-                              Text(
-                                'New Match',
-                                style: TextStyle(
-                                  color: isDark
-                                      ? AppColors.darkTextPrimary
-                                      : Colors.white,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() => _isMenuOpen = !_isMenuOpen);
-                                },
-                                icon: Icon(
-                                  Icons.menu,
-                                  color: isDark
-                                      ? AppColors.darkTextPrimary
-                                      : Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 30.h),
-
                           // Select Batting Team
                           Text(
                             'Select Batting Team:',
@@ -107,8 +70,10 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
                             value: _selectedBattingTeam,
                             teams: state.teams,
                             isDark: isDark,
-                            onChanged: (val) =>
-                                setState(() => _selectedBattingTeam = val),
+                            onChanged: (val) => {
+                              debugPrint('selected batting team: $val'),
+                              setState(() => _selectedBattingTeam = val),
+                            },
                           ),
 
                           SizedBox(height: 24.h),
@@ -159,7 +124,6 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
                   ),
 
                   // Menu Overlay
-                  if (_isMenuOpen) _buildMenu(isDark),
                 ],
               ),
             );
@@ -178,9 +142,7 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.darkSurfaceLight.withOpacity(0.8)
-            : Colors.white.withOpacity(0.1),
+        color: isDark ? AppColors.darkSurfaceLight : Colors.white,
         borderRadius: BorderRadius.circular(10.r),
       ),
       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -188,7 +150,12 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
         value: value,
         iconEnabledColor: isDark ? AppColors.darkTextPrimary : Colors.white70,
         dropdownColor: isDark ? AppColors.darkSurface : const Color(0xFF1F1C3A),
-        decoration: const InputDecoration(border: InputBorder.none),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+        ),
         hint: Text(
           hint,
           style: TextStyle(
@@ -214,10 +181,11 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
   Widget _buildTextField(bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.darkSurfaceLight.withOpacity(0.8)
-            : Colors.white.withOpacity(0.1),
+        color: isDark ? AppColors.darkSurfaceLight : AppColors.surface,
         borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.border,
+        ),
       ),
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: TextField(
@@ -228,6 +196,9 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
           hintText: 'e.g. 20',
           hintStyle: TextStyle(
             color: isDark ? AppColors.darkTextSecondary : Colors.white70,
@@ -276,64 +247,6 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenu(bool isDark) {
-    return Positioned(
-      top: 80.h,
-      right: 20.w,
-      child: Container(
-        width: 200.w,
-        decoration: BoxDecoration(
-          color: isDark
-              ? AppColors.darkSurface.withOpacity(0.95)
-              : const Color(0xFF1F1C3A).withOpacity(0.95),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _menuItem(Icons.home, 'Home', isDark),
-            _menuItem(Icons.sports_cricket, 'New Match', isDark),
-            _menuItem(Icons.history, 'Match History', isDark),
-            _menuItem(Icons.groups, 'Teams', isDark),
-            _menuItem(Icons.bar_chart, 'Player Stats', isDark),
-            _menuItem(Icons.summarize, 'Match Summary', isDark),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _menuItem(IconData icon, String title, bool isDark) {
-    return InkWell(
-      onTap: () {
-        setState(() => _isMenuOpen = false);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('$title clicked')));
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: isDark ? AppColors.darkTextPrimary : Colors.white,
-              size: 20.w,
-            ),
-            SizedBox(width: 10.w),
-            Text(
-              title,
-              style: TextStyle(
-                color: isDark ? AppColors.darkTextPrimary : Colors.white,
-              ),
-            ),
-          ],
         ),
       ),
     );

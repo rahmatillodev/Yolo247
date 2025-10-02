@@ -8,6 +8,7 @@ import '../models/match.dart';
 import '../models/player.dart';
 import '../models/player_stats.dart';
 import '../models/team.dart';
+import '../utils/mock_data.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState()) {
@@ -29,9 +30,16 @@ class AppCubit extends Cubit<AppState> {
       final prefs = await SharedPreferences.getInstance();
       final teamsJson = prefs.getStringList('teams') ?? [];
 
-      final teams = teamsJson
-          .map((json) => Team.fromJson(jsonDecode(json)))
-          .toList();
+      List<Team> teams;
+      if (teamsJson.isEmpty) {
+        // Load mock data if no teams exist
+        teams = MockData.getMockTeams();
+        await _saveTeams(teams);
+      } else {
+        teams = teamsJson
+            .map((json) => Team.fromJson(jsonDecode(json)))
+            .toList();
+      }
 
       emit(state.copyWith(teams: teams, isLoading: false));
     } catch (e) {
@@ -132,9 +140,16 @@ class AppCubit extends Cubit<AppState> {
       final prefs = await SharedPreferences.getInstance();
       final playersJson = prefs.getStringList('players') ?? [];
 
-      final players = playersJson
-          .map((json) => Player.fromJson(jsonDecode(json)))
-          .toList();
+      List<Player> players;
+      if (playersJson.isEmpty) {
+        // Load mock data if no players exist
+        players = MockData.getMockPlayers();
+        await _savePlayers(players);
+      } else {
+        players = playersJson
+            .map((json) => Player.fromJson(jsonDecode(json)))
+            .toList();
+      }
 
       emit(state.copyWith(players: players, isLoading: false));
     } catch (e) {

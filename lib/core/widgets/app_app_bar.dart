@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/constants/app_constants.dart';
+import 'package:yolo247/core/routes/app_routes.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_fonts.dart';
@@ -57,43 +59,43 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
                         icon: Icons.home,
                         label: 'Home',
                         iconColor: AppColors.accent,
-                        route: '/',
+                        route: Routes.home,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.edit,
-                        label: 'New Match',
+                        label: AppTexts.newMatch,
                         iconColor: AppColors.error,
-                        route: '/new-match',
+                        route: Routes.newMatch,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.history,
-                        label: 'Match History',
+                        label: AppTexts.matchHistory,
                         iconColor: AppColors.warning,
                         isSelected: true,
-                        route: '/match-history',
+                        route: Routes.matchHistory,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.group,
-                        label: 'Teams',
+                        label: AppTexts.teams,
                         iconColor: Colors.orange,
-                        route: '/teams',
+                        route: Routes.teamManagement,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.bar_chart,
-                        label: 'Player Stats',
+                        label: AppTexts.playerStats,
                         iconColor: AppColors.primary,
-                        route: '/player-stats',
+                        route: Routes.playerStats,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.assignment,
-                        label: 'Match Summary',
+                        label: AppTexts.matchSummary,
                         iconColor: AppColors.warning,
-                        route: '/match-summary',
+                        route: Routes.matchSummary,
                       ),
                     ],
                   ),

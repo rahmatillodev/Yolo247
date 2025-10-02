@@ -57,6 +57,7 @@ class AppColors {
 
   // Shadow Colors
   static const Color shadow = Color(0x1A000000);
+  static const Color darkShadow = Color(0x33000000);
   static const Color shadowDark = Color(0x33000000);
 
   // Gradient Colors
