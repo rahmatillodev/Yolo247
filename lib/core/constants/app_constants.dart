@@ -13,6 +13,10 @@ class AppConstants {
   static EdgeInsets get horizontalPadding =>
       EdgeInsets.symmetric(horizontal: 16.w);
   static EdgeInsets get verticalPadding => EdgeInsets.symmetric(vertical: 16.h);
+  static EdgeInsets get paddingForButton =>
+      EdgeInsets.only(bottom: 64.h, left: 16.w, right: 16.w);
+  static EdgeInsets get buttonPadding =>
+      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h);
 
   // Border Radius
   static BorderRadius get defaultBorderRadius => BorderRadius.circular(12.r);

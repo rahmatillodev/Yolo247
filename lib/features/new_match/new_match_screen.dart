@@ -185,6 +185,9 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
           context.read<AppCubit>().startNewMatch(
             _selectedBattingTeam!,
             _selectedBowlingTeam!,
+            "selectedBattingTeamName",
+            "teamA",
+            "teamB",
             overs,
           );
 

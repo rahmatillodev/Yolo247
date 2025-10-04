@@ -9,6 +9,9 @@ class Match extends Equatable {
   final String id;
   final String battingTeamId;
   final String bowlingTeamId;
+  final String teamA;
+  final String teamB;
+  final String bowlingTeamName;
   final int totalOvers;
   final String status;
   final DateTime startTime;
@@ -25,6 +28,9 @@ class Match extends Equatable {
     required this.id,
     required this.battingTeamId,
     required this.bowlingTeamId,
+    required this.teamA,
+    required this.teamB,
+    required this.bowlingTeamName,
     required this.totalOvers,
     required this.status,
     required this.startTime,
@@ -41,6 +47,9 @@ class Match extends Equatable {
   factory Match.create({
     required String battingTeamId,
     required String bowlingTeamId,
+    required String teamA,
+    required String teamB,
+    required String bowlingTeamName,
     required int totalOvers,
   }) {
     final now = DateTime.now();
@@ -48,6 +57,9 @@ class Match extends Equatable {
       id: const Uuid().v4(),
       battingTeamId: battingTeamId,
       bowlingTeamId: bowlingTeamId,
+      teamA: teamA,
+      teamB: teamB,
+      bowlingTeamName: bowlingTeamName,
       totalOvers: totalOvers,
       status: 'in_progress',
       startTime: now,
@@ -67,6 +79,9 @@ class Match extends Equatable {
     String? id,
     String? battingTeamId,
     String? bowlingTeamId,
+    String? teamA,
+    String? teamB,
+    String? bowlingTeamName,
     int? totalOvers,
     String? status,
     DateTime? startTime,
@@ -83,6 +98,9 @@ class Match extends Equatable {
       id: id ?? this.id,
       battingTeamId: battingTeamId ?? this.battingTeamId,
       bowlingTeamId: bowlingTeamId ?? this.bowlingTeamId,
+      teamA: teamA ?? this.teamA,
+      teamB: teamB ?? this.teamB,
+      bowlingTeamName: bowlingTeamName ?? this.bowlingTeamName,
       totalOvers: totalOvers ?? this.totalOvers,
       status: status ?? this.status,
       startTime: startTime ?? this.startTime,
@@ -191,6 +209,9 @@ class Match extends Equatable {
     id,
     battingTeamId,
     bowlingTeamId,
+    teamA,
+    teamB,
+    bowlingTeamName,
     totalOvers,
     status,
     startTime,

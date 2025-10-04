@@ -49,22 +49,20 @@ class AppRouter {
           settings: settings,
         );
       case Routes.matchScoring:
-        final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
-          builder: (_) =>
-              MatchScoringScreen(matchId: args?['matchId'] as String?),
+          builder: (_) => MatchScoringScreen(),
           settings: settings,
         );
       case Routes.matchHistory:
         return MaterialPageRoute(
-          builder: (_) => const MatchHistoryScreen(),
+          builder: (_) => MatchHistoryScreen(),
           settings: settings,
         );
       case Routes.matchDetails:
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder: (_) =>
-              MatchDetailsScreen(matchId: args?['matchId'] as String?),
+              MatchDetailsScreen(match: args?['match'] as Map<String, dynamic>),
           settings: settings,
         );
       case Routes.teamManagement:

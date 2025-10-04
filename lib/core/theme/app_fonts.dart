@@ -22,6 +22,7 @@ class AppFonts {
   static double fontSize22 = 22.sp;
   static double fontSize24 = 24.sp;
   static double fontSize28 = 28.sp;
+  static double fontSize30 = 30.sp;
   static double fontSize32 = 32.sp;
   static double fontSize36 = 36.sp;
   static double fontSize40 = 40.sp;
@@ -199,6 +200,65 @@ class AppFonts {
   static TextStyle bold36Inter = GoogleFonts.inter(
     fontSize: fontSize36,
     fontWeight: bold,
+    color: AppColors.textWhite,
+  );
+
+  static TextStyle semibold30Inter = GoogleFonts.inter(
+    fontSize: fontSize30,
+    fontWeight: semiBold,
+    color: AppColors.textWhite,
+  );
+
+  static TextStyle semibold20Inter = GoogleFonts.inter(
+    fontSize: fontSize20,
+    fontWeight: semiBold,
+    color: AppColors.textWhite,
+  );
+  static TextStyle semibold16Inter = GoogleFonts.inter(
+    fontSize: fontSize16,
+    fontWeight: semiBold,
+    color: AppColors.textWhite,
+  );
+  static TextStyle semibold14Inter = GoogleFonts.inter(
+    fontSize: fontSize14,
+    fontWeight: semiBold,
+    color: AppColors.textWhite,
+  );
+
+  static TextStyle regular12Inter = GoogleFonts.inter(
+    fontSize: fontSize12,
+    fontWeight: regular,
+    color: AppColors.textWhite,
+  );
+  static TextStyle light12Inter = GoogleFonts.inter(
+    fontSize: fontSize12,
+    fontWeight: light,
+    color: AppColors.textWhite,
+  );
+
+  static TextStyle regular18Inter = GoogleFonts.inter(
+    fontSize: fontSize18,
+    fontWeight: regular,
+    color: AppColors.textWhite,
+  );
+  static TextStyle regular16Inter = GoogleFonts.inter(
+    fontSize: fontSize16,
+    fontWeight: regular,
+    color: AppColors.textWhite,
+  );
+  static TextStyle light18Inter = GoogleFonts.inter(
+    fontSize: fontSize18,
+    fontWeight: light,
+    color: AppColors.textWhite,
+  );
+  static TextStyle light14Inter = GoogleFonts.inter(
+    fontSize: fontSize14,
+    fontWeight: light,
+    color: AppColors.textWhite,
+  );
+  static TextStyle regular14Inter = GoogleFonts.inter(
+    fontSize: fontSize14,
+    fontWeight: regular,
     color: AppColors.textWhite,
   );
 }

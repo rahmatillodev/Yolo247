@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:yolo247/core/assets/assets.gen.dart';
 import 'package:yolo247/core/routes/app_routes.dart';
 
 import '../theme/app_colors.dart';
@@ -35,68 +37,66 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
             Positioned(
               top: 60.h,
               right: 16.w,
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  width: 200.w,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1A2332),
-                    borderRadius: BorderRadius.circular(12.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black,
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.home,
-                        label: 'Home',
-                        iconColor: AppColors.accent,
-                        route: Routes.home,
-                      ),
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.edit,
-                        label: "New Match",
-                        iconColor: AppColors.error,
-                        route: Routes.newMatch,
-                      ),
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.history,
-                        label: "Match History",
-                        iconColor: AppColors.warning,
-                        isSelected: true,
-                        route: Routes.matchHistory,
-                      ),
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.group,
-                        label: "Teams",
-                        iconColor: Colors.orange,
-                        route: Routes.teamManagement,
-                      ),
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.bar_chart,
-                        label: "Player Stats",
-                        iconColor: AppColors.primary,
-                        route: Routes.playerStats,
-                      ),
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.assignment,
-                        label: "Match Summary",
-                        iconColor: AppColors.warning,
-                        route: Routes.matchSummary,
-                      ),
-                    ],
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: AppColors.dialogGradient,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Material(
+                  color: Colors.black,
+                  child: Container(
+                    width: 220.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildMenuItem(
+                          context,
+                          icon: Assets.icons.homeIcon,
+                          label: 'Home',
+                          route: Routes.home,
+                          isSelected: false,
+                        ),
+
+                        _buildMenuItem(
+                          context,
+                          icon: Assets.icons.newMatchIcon,
+                          label: "New Match",
+                          route: Routes.newMatch,
+                          isSelected: false,
+                        ),
+                        _buildMenuItem(
+                          context,
+                          icon: Assets.icons.matchHistory,
+                          label: "Match History",
+                          route: Routes.matchHistory,
+                          isSelected: true,
+                        ),
+                        _buildMenuItem(
+                          context,
+                          icon: Assets.icons.team,
+                          label: "Teams",
+                          route: Routes.teamManagement,
+                          isSelected: false,
+                        ),
+                        _buildMenuItem(
+                          context,
+                          icon: Assets.icons.playerStatus,
+                          label: "Player Stats",
+                          route: Routes.playerStats,
+                          isSelected: false,
+                        ),
+                        _buildMenuItem(
+                          context,
+                          icon: Assets.icons.matchStatus,
+                          label: "Match Summary",
+                          route: Routes.matchSummary,
+                          isSelected: false,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -109,9 +109,8 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildMenuItem(
     BuildContext context, {
-    required IconData icon,
+    required String icon,
     required String label,
-    required Color iconColor,
     String? route,
     bool isSelected = false,
   }) {
@@ -125,22 +124,22 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
-          border: Border(
-            left: BorderSide(
-              color: isSelected ? AppColors.primary : Colors.transparent,
-              width: 3.w,
-            ),
-          ),
+          color: isSelected
+              ? AppColors.primary.withValues(alpha: 0.15)
+              : Colors.transparent, // AppColors.primary
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Row(
           children: [
-            Icon(icon, color: iconColor, size: 24.w),
-            SizedBox(width: 12.w),
+            SvgPicture.asset(icon, width: 26.w, height: 26.h),
+            12.horizontalSpace,
             Text(
               label,
               style: AppFonts.bodyText1.copyWith(
-                color: isSelected ? AppColors.textLight : AppColors.textWhite,
+                color: isSelected
+                    ? AppColors.primary
+                    : AppColors
+                          .textWhite, // AppColors.primary / AppColors.textWhite
                 fontWeight: isSelected ? AppFonts.semiBold : AppFonts.regular,
               ),
             ),
@@ -153,34 +152,44 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
-        title,
-        style: AppFonts.headline6.copyWith(
-          color: AppColors.textWhite,
-          fontWeight: AppFonts.semiBold,
-        ),
+      elevation: elevation ?? 0,
+      automaticallyImplyLeading: false,
+      centerTitle: true,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(gradient: AppColors.appbarGradient),
       ),
+      titleSpacing: 0,
+      leadingWidth: double.infinity,
       leading: showBackButton
-          ? IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: foregroundColor ?? AppColors.textWhite,
-                size: 24.w,
-              ),
-              onPressed: onBackPressed ?? () => Navigator.pop(context),
+          ? Row(
+              children: [
+                SizedBox(width: 8.w),
+                InkWell(
+                  onTap: onBackPressed ?? () => Navigator.pop(context),
+                  child: Assets.icons.arrowBack.image(
+                    width: 26.w,
+                    height: 26.h,
+                  ),
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  title,
+                  style: AppFonts.bold18Inter.copyWith(
+                    color: AppColors.textWhite,
+                  ),
+                ), // AppColors.textWhite
+              ],
             )
           : null,
       actions: [
-        IconButton(
-          icon: Icon(Icons.menu, size: 28.w),
-          onPressed: () => _showMenu(context),
+        GestureDetector(
+          onTap: () => _showMenu(context),
+          child: Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: Assets.icons.menuIcon.image(width: 28.w, height: 28.h),
+          ),
         ),
       ],
-      backgroundColor: backgroundColor ?? AppColors.textPrimary,
-      foregroundColor: foregroundColor ?? AppColors.textWhite,
-      elevation: elevation ?? 0,
-      centerTitle: true,
-      automaticallyImplyLeading: false,
     );
   }
 

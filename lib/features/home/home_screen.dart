@@ -46,6 +46,7 @@ class HomeScreen extends StatelessWidget {
                             context: context,
                             title: "Match History",
                             icon: '📋',
+                            // Boshqa screendan chaqirish
                             onTap: () =>
                                 Navigator.pushNamed(context, '/match-history'),
                           ),

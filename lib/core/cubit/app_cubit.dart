@@ -8,7 +8,6 @@ import '../models/match.dart';
 import '../models/player.dart';
 import '../models/player_stats.dart';
 import '../models/team.dart';
-import '../utils/mock_data.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState()) {
@@ -33,7 +32,7 @@ class AppCubit extends Cubit<AppState> {
       List<Team> teams;
       if (teamsJson.isEmpty) {
         // Load mock data if no teams exist
-        teams = MockData.getMockTeams();
+        teams = [];
         await _saveTeams(teams);
       } else {
         teams = teamsJson
@@ -143,7 +142,7 @@ class AppCubit extends Cubit<AppState> {
       List<Player> players;
       if (playersJson.isEmpty) {
         // Load mock data if no players exist
-        players = MockData.getMockPlayers();
+        players = [];
         await _savePlayers(players);
       } else {
         players = playersJson
@@ -253,8 +252,7 @@ class AppCubit extends Cubit<AppState> {
       List<Match> matches;
       if (matchesJson.isEmpty) {
         // Load mock data if no matches exist
-        matches = MockData.getMockMatches();
-        await _saveMatches(matches);
+        matches = [];
       } else {
         matches = matchesJson
             .map((json) => Match.fromJson(jsonDecode(json)))
@@ -273,6 +271,9 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> startNewMatch(
+    String teamA,
+    String teamB,
+    String bowlingTeamName,
     String battingTeamId,
     String bowlingTeamId,
     int totalOvers,
@@ -281,6 +282,9 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(isLoading: true));
 
       final newMatch = Match.create(
+        teamA: teamA,
+        teamB: teamB,
+        bowlingTeamName: bowlingTeamName,
         battingTeamId: battingTeamId,
         bowlingTeamId: bowlingTeamId,
         totalOvers: totalOvers,
@@ -368,7 +372,7 @@ class AppCubit extends Cubit<AppState> {
       List<PlayerStats> stats;
       if (statsJson.isEmpty) {
         // Load mock data if no stats exist
-        stats = MockData.getMockPlayerStats();
+        stats = [];
         await _savePlayerStats(stats);
       } else {
         stats = statsJson

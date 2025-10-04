@@ -10,6 +10,7 @@ class AppColors {
   static const Color secondary = Color(0xFFFFA726); // Cricket Gold
   static const Color secondaryLight = Color(0xFFFFCC02); // Light Gold
   static const Color secondaryDark = Color(0xFFF57F17); // Dark Gold
+  static const Color secondaryText = Color(0xFF92A1FF); // Gradient Gold
 
   // Accent Colors
   static const Color accent = Color(0xFF10B981); // Success Green
@@ -59,6 +60,9 @@ class AppColors {
   static const Color shadow = Color(0x1A000000);
   static const Color darkShadow = Color(0x33000000);
   static const Color shadowDark = Color(0x33000000);
+  static const Color transparent = Colors.transparent;
+  static const Color textColor = Color(0xFFFECF84);
+  static const Color textSuccess = Color(0xFF33C85D);
 
   // Gradient Colors
   static const LinearGradient primaryGradient = LinearGradient(
@@ -101,5 +105,43 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [Color(0xFF1A1F3A), Color(0xFF2A3050)],
+  );
+
+  // Appbar gradient background
+  static const LinearGradient appbarGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF000000), Color(0xFF061136)],
+  );
+
+  static LinearGradient dialogGradient = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF27242C).withValues(alpha: 0.6),
+      Color(0xFF171A23).withValues(alpha: 0.6),
+    ],
+  );
+
+  static const RadialGradient screenGradient = RadialGradient(
+    center: Alignment(-0.6, 1.35),
+    radius: 1.2,
+    colors: [Color(0xFF242E38), Color(0xFF080209)],
+    stops: [0.0, 0.633],
+  );
+  static LinearGradient cardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF27242C).withValues(alpha: 0.6),
+      Color(0xFF171A23).withValues(alpha: 0.6),
+    ],
+  );
+
+  static LinearGradient matchDetailsGradient = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [Color(0xFF00377F), Color(0xFF001D44)],
+    stops: [0.1368, 0.9311],
   );
 }

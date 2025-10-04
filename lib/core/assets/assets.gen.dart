@@ -24,15 +24,45 @@ class $AssetsIconsGen {
   /// File path: assets/icons/edit.png
   AssetGenImage get edit => const AssetGenImage('assets/icons/edit.png');
 
+  /// File path: assets/icons/home_icon.svg
+  String get homeIcon => 'assets/icons/home_icon.svg';
+
+  /// File path: assets/icons/match_history.svg
+  String get matchHistory => 'assets/icons/match_history.svg';
+
+  /// File path: assets/icons/match_status.svg
+  String get matchStatus => 'assets/icons/match_status.svg';
+
   /// File path: assets/icons/menu_icon.png
   AssetGenImage get menuIcon =>
       const AssetGenImage('assets/icons/menu_icon.png');
+
+  /// File path: assets/icons/new_match_icon.svg
+  String get newMatchIcon => 'assets/icons/new_match_icon.svg';
+
+  /// File path: assets/icons/player_status.svg
+  String get playerStatus => 'assets/icons/player_status.svg';
+
+  /// File path: assets/icons/team.svg
+  String get team => 'assets/icons/team.svg';
 
   /// File path: assets/icons/user.png
   AssetGenImage get user => const AssetGenImage('assets/icons/user.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [icon, arrowBack, edit, menuIcon, user];
+  List<dynamic> get values => [
+    icon,
+    arrowBack,
+    edit,
+    homeIcon,
+    matchHistory,
+    matchStatus,
+    menuIcon,
+    newMatchIcon,
+    playerStatus,
+    team,
+    user,
+  ];
 }
 
 class $AssetsImagesGen {

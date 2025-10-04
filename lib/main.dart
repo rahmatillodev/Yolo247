@@ -7,6 +7,7 @@ import 'package:yolo247/core/routes/app_routes.dart';
 import 'core/cubit/app_cubit.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 

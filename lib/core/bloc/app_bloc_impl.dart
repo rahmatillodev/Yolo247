@@ -282,6 +282,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(state.copyWith(isLoading: true));
 
       final newMatch = Match.create(
+        teamA: event.teamA,
+        teamB: event.teamB,
+        bowlingTeamName: event.bowlingTeamName,
         battingTeamId: event.battingTeamId,
         bowlingTeamId: event.bowlingTeamId,
         totalOvers: event.totalOvers,

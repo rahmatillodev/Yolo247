@@ -84,11 +84,17 @@ class DeletePlayer extends AppEvent {
 class LoadMatches extends AppEvent {}
 
 class StartNewMatch extends AppEvent {
+  final String teamA;
+  final String teamB;
+  final String bowlingTeamName;
   final String battingTeamId;
   final String bowlingTeamId;
   final int totalOvers;
 
   const StartNewMatch({
+    required this.teamA,
+    required this.teamB,
+    required this.bowlingTeamName,
     required this.battingTeamId,
     required this.bowlingTeamId,
     required this.totalOvers,
