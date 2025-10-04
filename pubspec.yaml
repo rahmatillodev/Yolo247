@@ -90,4 +90,13 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/fonts/
+
+  fonts:
+    - family: Kaushan Script
+      fonts:
+        - asset: assets/fonts/KaushanScript-Regular.ttf
+
+  
+  
 

@@ -45,10 +45,4 @@ class AppConstants {
   static Duration get shortAnimation => const Duration(milliseconds: 200);
   static Duration get mediumAnimation => const Duration(milliseconds: 300);
   static Duration get longAnimation => const Duration(milliseconds: 500);
-
-  // Cricket Specific Constants
-  static const int maxOvers = 50;
-  static const int maxWickets = 10;
-  static const int maxRunsPerBall = 6;
-  static const int minOvers = 1;
 }
