@@ -272,8 +272,8 @@ class HomeScreen extends StatelessWidget {
               opacity: 0.8,
               child: Image.asset(
                 Assets.images.banner.path,
-                width: 250.w,
-                height: 250.w,
+                width: 200.w,
+                height: 200.w,
                 fit: BoxFit.contain,
               ),
             ),
