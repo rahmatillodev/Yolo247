@@ -250,9 +250,16 @@ class AppCubit extends Cubit<AppState> {
       final prefs = await SharedPreferences.getInstance();
       final matchesJson = prefs.getStringList('matches') ?? [];
 
-      final matches = matchesJson
-          .map((json) => Match.fromJson(jsonDecode(json)))
-          .toList();
+      List<Match> matches;
+      if (matchesJson.isEmpty) {
+        // Load mock data if no matches exist
+        matches = MockData.getMockMatches();
+        await _saveMatches(matches);
+      } else {
+        matches = matchesJson
+            .map((json) => Match.fromJson(jsonDecode(json)))
+            .toList();
+      }
 
       emit(state.copyWith(matches: matches, isLoading: false));
     } catch (e) {
@@ -358,9 +365,16 @@ class AppCubit extends Cubit<AppState> {
       final prefs = await SharedPreferences.getInstance();
       final statsJson = prefs.getStringList('player_stats') ?? [];
 
-      final stats = statsJson
-          .map((json) => PlayerStats.fromJson(jsonDecode(json)))
-          .toList();
+      List<PlayerStats> stats;
+      if (statsJson.isEmpty) {
+        // Load mock data if no stats exist
+        stats = MockData.getMockPlayerStats();
+        await _savePlayerStats(stats);
+      } else {
+        stats = statsJson
+            .map((json) => PlayerStats.fromJson(jsonDecode(json)))
+            .toList();
+      }
 
       emit(state.copyWith(playerStats: stats, isLoading: false));
     } catch (e) {
@@ -411,6 +425,40 @@ class AppCubit extends Cubit<AppState> {
 
   void setLoading(bool isLoading) {
     emit(state.copyWith(isLoading: isLoading));
+  }
+
+  // Helper methods for getting data
+  String getTeamName(String teamId) {
+    final team = state.teams.firstWhere(
+      (team) => team.id == teamId,
+      orElse: () => Team.create(name: 'Unknown Team'),
+    );
+    return team.name;
+  }
+
+  Match? getMatchById(String matchId) {
+    try {
+      return state.matches.firstWhere((match) => match.id == matchId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  String getMatchResult(Match match) {
+    if (match.status != 'completed' || match.winnerTeamId == null) {
+      return 'Match in progress';
+    }
+
+    final winnerTeamName = getTeamName(match.winnerTeamId!);
+    return match.winReason ?? '$winnerTeamName won';
+  }
+
+  String getMatchScoreDisplay(Match match) {
+    if (match.status == 'completed') {
+      return '${match.battingTeamScore.runs}/${match.battingTeamScore.wickets} - ${match.bowlingTeamScore.runs}/${match.bowlingTeamScore.wickets}';
+    } else {
+      return '${match.battingTeamScore.runs}/${match.battingTeamScore.wickets} (${match.battingTeamScore.overs} overs)';
+    }
   }
 
   // Helper methods for saving data
