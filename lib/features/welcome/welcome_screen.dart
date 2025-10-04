@@ -25,15 +25,29 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   Spacer(flex: 2),
                   Text(
-                        'Welcome to Cricket Score Counter!',
+                        'Welcome',
                         textAlign: TextAlign.center,
-                        style: AppFonts.size42weight300fontKaushanScript
-                            .copyWith(color: AppColors.textWhite),
+                        style: TextStyle(
+                          fontFamily: 'Kaushan Script',
+                          fontSize: 32,
+                          color: AppColors.textWhite,
+                        ),
                       )
                       .animate()
                       .fadeIn(duration: AppConstants.mediumAnimation)
                       .slideY(begin: 0.3, end: 0),
-
+                  Text(
+                        'to Cricket Score Counter!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Kaushan Script',
+                          fontSize: 32,
+                          color: AppColors.textWhite,
+                        ),
+                      )
+                      .animate()
+                      .fadeIn(duration: AppConstants.mediumAnimation)
+                      .slideY(begin: 0.3, end: 0),
                   Text(
                         'Track matches, manage teams,\nand keep your cricket scores effortlessly.',
                         textAlign: TextAlign.center,

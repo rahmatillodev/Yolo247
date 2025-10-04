@@ -25,8 +25,6 @@ class HomeScreen extends StatelessWidget {
                   // Header
                   _buildHeader(context, isDark),
 
-                  20.verticalSpace,
-
                   // Hero Section
                   _buildHeroSection(context, isDark),
 
@@ -43,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                               child: _buildMenuCard(
                                 context: context,
                                 title: AppTexts.newMatch,
-                                icon: '🏏',
+                                iconPath: Assets.images.newMatch.path,
                                 isDark: isDark,
                                 onTap: () =>
                                     Navigator.pushNamed(context, '/new-match'),
@@ -54,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                               child: _buildMenuCard(
                                 context: context,
                                 title: AppTexts.matchHistory,
-                                icon: '📋',
+                                iconPath: Assets.images.historyIcon.path,
                                 isDark: isDark,
                                 onTap: () => Navigator.pushNamed(
                                   context,
@@ -71,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                               child: _buildMenuCard(
                                 context: context,
                                 title: AppTexts.teams,
-                                icon: '👥',
+                                iconPath: Assets.images.team.path,
                                 isDark: isDark,
                                 onTap: () => Navigator.pushNamed(
                                   context,
@@ -84,7 +82,7 @@ class HomeScreen extends StatelessWidget {
                               child: _buildMenuCard(
                                 context: context,
                                 title: AppTexts.playerStats,
-                                icon: '📊',
+                                iconPath: Assets.images.statistics.path,
                                 isDark: isDark,
                                 onTap: () => Navigator.pushNamed(
                                   context,
@@ -184,98 +182,123 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildHeroSection(BuildContext context, bool isDark) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
-      height: 280.h,
+      width: double.infinity,
+      height: 200.h,
       decoration: BoxDecoration(
-        gradient: isDark ? AppColors.darkGradient : AppColors.mainGradient,
-        borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryLight.withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        image: DecorationImage(
+          image: AssetImage(Assets.images.bannerBackground.path),
+          fit: BoxFit.cover,
+        ),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1565C0), Color(0xFF0D47A1)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
       ),
       child: Stack(
         children: [
-          // Background Pattern
+          // Content on the left
           Positioned(
-            right: -20,
-            top: 20,
-            bottom: 20,
-            child: Opacity(
-              opacity: 0.6,
-              child: Image.asset(
-                Assets.images.bannerBackground.path,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => const SizedBox(),
-              ),
-            ),
-          ),
-
-          // Content
-          Padding(
-            padding: EdgeInsets.all(30.w),
+            left: 24.w,
+            top: 0,
+            bottom: 0,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Score Every Run.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 36.sp,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Score ',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Every ',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFB74D),
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Run.',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 8.h),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   'Track Every Ball.',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
-                    fontSize: 22.sp,
+                    fontSize: 24,
+                    color: Colors.white70,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: 24.h),
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/new-match'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryLight,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 32.w,
-                      vertical: 16.h,
+                const SizedBox(height: 24),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF6272DB), Color(0xFF3B4AA2)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    elevation: 5,
+                    borderRadius: BorderRadius.circular(73),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0x40000000),
+                        offset: const Offset(2, 4),
+                        blurRadius: 4,
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    'Start New Match',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pushNamed(context, '/new-match'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(73),
+                      ),
+                    ),
+                    child: const Text(
+                      'Start New Match',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-
-          // Cricket Player Image (placeholder)
+          // Player image on the right
           Positioned(
             right: -30.w,
-            bottom: -20.h,
+            bottom: -30.h,
             child: Opacity(
-              opacity: 0.3,
-              child: Icon(
-                Icons.sports_cricket,
-                size: 200.w,
-                color: Colors.white,
+              opacity: 0.8,
+              child: Image.asset(
+                Assets.images.banner.path,
+                width: 250.w,
+                height: 250.w,
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -287,7 +310,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildMenuCard({
     required BuildContext context,
     required String title,
-    required String icon,
+    required String iconPath,
     required bool isDark,
     required VoidCallback onTap,
   }) {
@@ -306,7 +329,11 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(icon, style: TextStyle(fontSize: 48.sp)),
+            Image.asset(
+              iconPath,
+              width: 48.w,
+              height: 48.w,
+            ),
             SizedBox(height: 12.h),
             Text(
               title,
@@ -343,7 +370,11 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text('📋', style: TextStyle(fontSize: 40.sp)),
+            Image.asset(
+              Assets.images.historyIcon.path,
+              width: 40.w,
+              height: 40.w,
+            ),
             SizedBox(width: 16.w),
             Text(
               'Match Summary',
