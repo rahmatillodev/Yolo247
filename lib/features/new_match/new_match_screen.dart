@@ -29,12 +29,12 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppAppBar(title: 'New Match', actions: []),
-          backgroundColor: AppColors.darkBackground,
+          backgroundColor: AppColors.transparent,
           body: Stack(
             children: [
               // Background Gradient
               Container(
-                decoration: BoxDecoration(gradient: AppColors.darkGradient),
+                decoration: BoxDecoration(gradient: AppColors.screenGradient),
               ),
 
               SafeArea(

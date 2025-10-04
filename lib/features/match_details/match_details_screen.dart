@@ -138,7 +138,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
 
                 // 🔹 Tabs
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
                       onTap: () => setState(() => _isTeamASelected = true),
@@ -221,7 +221,9 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
             Text(
               score,
               textAlign: TextAlign.center,
-              style: AppFonts.semibold20Inter.copyWith(color: Colors.white),
+              style: AppFonts.semibold20Inter.copyWith(
+                color: AppColors.textColor,
+              ),
             ),
             4.verticalSpace,
             _buildScoreRow("Overs:", overs),
@@ -277,17 +279,16 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,
             style: AppFonts.semibold16Inter.copyWith(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: AppColors.textColor,
             ),
           ),
           8.verticalSpace,
           Table(
-            // ❌ chiziqlar olib tashlandi
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             columnWidths: const {
               0: FlexColumnWidth(2),

@@ -129,6 +129,7 @@ class AppColors {
     colors: [Color(0xFF242E38), Color(0xFF080209)],
     stops: [0.0, 0.633],
   );
+
   static LinearGradient cardGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

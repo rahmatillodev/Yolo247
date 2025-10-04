@@ -157,7 +157,7 @@ class MatchSummaryScreen extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             team,
@@ -175,17 +175,45 @@ class MatchSummaryScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 6.h),
-          Text(
-            "Overs: $overs",
-            style: AppFonts.bodyText2.copyWith(color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Overs:",
+                style: AppFonts.bodyText2.copyWith(color: Colors.white),
+              ),
+              Text(
+                overs,
+                style: AppFonts.bodyText2.copyWith(color: Colors.white),
+              ),
+            ],
           ),
-          Text(
-            "Extras: $extras",
-            style: AppFonts.bodyText2.copyWith(color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Extras:",
+                style: AppFonts.bodyText2.copyWith(color: Colors.white),
+              ),
+              Text(
+                extras,
+                style: AppFonts.bodyText2.copyWith(color: Colors.white),
+              ),
+            ],
           ),
-          Text(
-            "Run Rate: $runRate",
-            style: AppFonts.bodyText2.copyWith(color: Colors.white),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Run Rate:",
+                style: AppFonts.bodyText2.copyWith(color: Colors.white),
+              ),
+              Text(
+                runRate,
+                style: AppFonts.bodyText2.copyWith(color: Colors.white),
+              ),
+            ],
           ),
         ],
       ),

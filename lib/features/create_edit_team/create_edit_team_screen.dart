@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/widgets/app_buttons.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/cubit/app_cubit.dart';
@@ -97,12 +98,12 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
         SizedBox(height: 8.h),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.darkSurface.withOpacity(0.9),
+            color: AppColors.darkSurface.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: TextField(
             controller: _teamNameController,
-            style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+            style: TextStyle(color: AppColors.textWhite),
             decoration: InputDecoration(
               hintText: MockData.teamName,
               hintStyle: TextStyle(
@@ -179,26 +180,11 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
     return SizedBox(
       width: double.infinity,
       height: 55.h,
-      child: OutlinedButton(
+      child: AppOutlinedButton(
         onPressed: () {
           _showAddPlayerDialog();
         },
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFF6272DB), width: 1.5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.black,
-        ),
-        child: Text(
-          MockData.addPlayer,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        text: MockData.addPlayer,
       ),
     );
   }

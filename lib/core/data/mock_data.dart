@@ -202,7 +202,7 @@ class MockData {
   static const String editTeams = 'Edit Teams';
   static const String teamName = 'Team Name';
   static const String players = 'Players';
-  static const String addPlayer = '+ Add Player';
+  static const String addPlayer = 'Add Player';
   static const String save = 'Save';
   static const String cancel = 'Cancel';
   static const String add = 'Add';
