@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/constants/app_constants.dart';
-import '../../core/cubit/theme_cubit.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
 import '../../core/widgets/app_app_bar.dart';
@@ -39,55 +37,42 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeMode>(
-      builder: (context, themeMode) {
-        final isDark = themeMode == ThemeMode.dark;
-        return Scaffold(
-          backgroundColor: isDark
-              ? AppColors.darkBackground
-              : AppColors.background,
-          appBar: AppAppBar(
-            title: widget.teamId == null ? 'Create Team' : 'Edit Team',
-          ),
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: isDark
-                  ? AppColors.darkGradient
-                  : AppColors.fieldGradient,
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: AppConstants.defaultPadding,
-                child: Column(
-                  children: [
-                    _buildTeamNameField(isDark),
-                    SizedBox(height: AppConstants.largeSpacing),
-                    Expanded(child: _buildPlayersList()),
-                    SizedBox(height: AppConstants.largeSpacing),
-                    _buildAddPlayerButton(),
-                    SizedBox(height: AppConstants.largeSpacing),
-                    _buildSaveButton(),
-                  ],
-                ),
-              ),
+    return Scaffold(
+      backgroundColor: AppColors.darkBackground,
+      appBar: AppAppBar(
+        title: widget.teamId == null ? 'Create Team' : 'Edit Team',
+      ),
+      body: Container(
+        decoration: BoxDecoration(gradient: AppColors.darkGradient),
+        child: SafeArea(
+          child: Padding(
+            padding: AppConstants.defaultPadding,
+            child: Column(
+              children: [
+                _buildTeamNameField(),
+                SizedBox(height: AppConstants.largeSpacing),
+                Expanded(child: _buildPlayersList()),
+                SizedBox(height: AppConstants.largeSpacing),
+                _buildAddPlayerButton(),
+                SizedBox(height: AppConstants.largeSpacing),
+                _buildSaveButton(),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
-  Widget _buildTeamNameField(bool isDark) {
+  Widget _buildTeamNameField() {
     return Container(
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.darkSurface.withOpacity(0.9)
-            : AppColors.surface.withOpacity(0.9),
+        color: AppColors.darkSurface.withOpacity(0.9),
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: isDark ? AppColors.shadowDark : AppColors.shadow,
+            color: AppColors.shadowDark,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -97,25 +82,19 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppTexts.teamName,
+            "Team Name",
             style: AppFonts.subtitle1.copyWith(
-              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+              color: AppColors.darkTextPrimary,
               fontWeight: AppFonts.semiBold,
             ),
           ),
           SizedBox(height: AppConstants.smallSpacing),
           TextFormField(
             controller: _teamNameController,
-            style: TextStyle(
-              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
-            ),
+            style: TextStyle(color: AppColors.darkTextPrimary),
             decoration: InputDecoration(
               hintText: 'Enter team name',
-              hintStyle: TextStyle(
-                color: isDark
-                    ? AppColors.darkTextSecondary
-                    : AppColors.textSecondary,
-              ),
+              hintStyle: TextStyle(color: AppColors.darkTextSecondary),
             ),
           ),
         ],
@@ -128,11 +107,11 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.9),
+        color: AppColors.darkSurface.withOpacity(0.9),
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: AppColors.shadowDark,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -144,7 +123,7 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
           Text(
             'Players',
             style: AppFonts.subtitle1.copyWith(
-              color: AppColors.textPrimary,
+              color: AppColors.darkTextPrimary,
               fontWeight: AppFonts.semiBold,
             ),
           ),
@@ -155,7 +134,7 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
                     child: Text(
                       'No players added yet',
                       style: AppFonts.bodyText2.copyWith(
-                        color: AppColors.textSecondary,
+                        color: AppColors.darkTextSecondary,
                       ),
                     ),
                   )
@@ -184,7 +163,9 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
         children: [
           Text(
             '${index + 1}.',
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textPrimary),
+            style: AppFonts.bodyText2.copyWith(
+              color: AppColors.darkTextPrimary,
+            ),
           ),
           SizedBox(width: AppConstants.smallSpacing),
           Expanded(
@@ -212,7 +193,7 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
       child: OutlinedButton.icon(
         onPressed: _showAddPlayerDialog,
         icon: const Icon(Icons.add),
-        label: Text(AppTexts.addPlayer),
+        label: Text("Add Player"),
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
           side: BorderSide(color: AppColors.primary),
@@ -238,7 +219,7 @@ class _CreateEditTeamScreenState extends State<CreateEditTeamScreen> {
           ),
         ),
         child: Text(
-          AppTexts.save,
+          "Save",
           style: AppFonts.button.copyWith(
             fontSize: AppFonts.fontSize18,
             fontWeight: AppFonts.semiBold,

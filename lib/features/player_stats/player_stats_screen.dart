@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yolo247/core/cubit/theme_cubit.dart';
 
 import '../../core/bloc/app_state.dart';
 import '../../core/constants/app_constants.dart';
@@ -17,62 +16,52 @@ class PlayerStatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeMode>(
-      builder: (context, themeMode) {
-        final isDark = themeMode == ThemeMode.dark;
-        return Scaffold(
-          backgroundColor: isDark
-              ? AppColors.darkBackground
-              : AppColors.background,
-          appBar: AppAppBar(title: AppTexts.playerStats),
-          body: BlocConsumer<AppCubit, AppState>(
-            listener: (context, state) {
-              if (state.errorMessage != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.errorMessage!),
-                    backgroundColor: AppColors.error,
+    return Scaffold(
+      backgroundColor: AppColors.darkBackground,
+
+      appBar: AppAppBar(title: "Player Stats"),
+      body: BlocConsumer<AppCubit, AppState>(
+        listener: (context, state) {
+          if (state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: AppColors.error,
+              ),
+            );
+            context.read<AppCubit>().clearError();
+          }
+        },
+        builder: (context, state) {
+          return SafeArea(
+            child: Padding(
+              padding: AppConstants.defaultPadding,
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  SizedBox(height: AppConstants.largeSpacing),
+                  Expanded(
+                    child: _buildPlayerList(state.players, state.playerStats),
                   ),
-                );
-                context.read<AppCubit>().clearError();
-              }
-            },
-            builder: (context, state) {
-              return SafeArea(
-                child: Padding(
-                  padding: AppConstants.defaultPadding,
-                  child: Column(
-                    children: [
-                      _buildHeader(isDark),
-                      SizedBox(height: AppConstants.largeSpacing),
-                      Expanded(
-                        child: _buildPlayerList(
-                          state.players,
-                          state.playerStats,
-                          isDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildHeader(bool isDark) {
+  Widget _buildHeader() {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.surface,
+        color: AppColors.darkSurface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
-            color: isDark ? AppColors.darkShadow : AppColors.shadow,
+            color: AppColors.darkShadow,
             blurRadius: 10.r,
             offset: Offset(0, 5.h),
           ),
@@ -83,9 +72,9 @@ class PlayerStatsScreen extends StatelessWidget {
           Icon(Icons.bar_chart, size: 48.w, color: AppColors.primary),
           SizedBox(height: AppConstants.mediumSpacing),
           Text(
-            AppTexts.playerStats,
+            "Player Stats",
             style: AppFonts.headline5.copyWith(
-              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+              color: AppColors.darkTextPrimary,
               fontWeight: AppFonts.bold,
             ),
           ),
@@ -99,19 +88,15 @@ class PlayerStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerList(
-    List<Player> players,
-    List<PlayerStats> playerStats,
-    bool isDark,
-  ) {
+  Widget _buildPlayerList(List<Player> players, List<PlayerStats> playerStats) {
     if (players.isEmpty || playerStats.isEmpty) {
-      return _buildEmptyState(isDark);
+      return _buildEmptyState();
     }
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.surface,
+        color: AppColors.darkSurface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
@@ -129,9 +114,7 @@ class PlayerStatsScreen extends StatelessWidget {
             child: Text(
               'Player Statistics',
               style: AppFonts.subtitle1.copyWith(
-                color: isDark
-                    ? AppColors.darkTextPrimary
-                    : AppColors.textPrimary,
+                color: AppColors.darkTextPrimary,
                 fontWeight: AppFonts.semiBold,
               ),
             ),
@@ -150,7 +133,7 @@ class PlayerStatsScreen extends StatelessWidget {
                     teamId: '',
                   ),
                 );
-                return _buildPlayerStatsCard(player, stats, isDark);
+                return _buildPlayerStatsCard(player, stats);
               },
             ),
           ),
@@ -159,12 +142,12 @@ class PlayerStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(bool isDark) {
+  Widget _buildEmptyState() {
     return Container(
       width: double.infinity,
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.surface,
+        color: AppColors.darkSurface,
         borderRadius: AppConstants.largeBorderRadius,
         boxShadow: [
           BoxShadow(
@@ -198,17 +181,14 @@ class PlayerStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerStatsCard(Player player, PlayerStats stats, bool isDark) {
+  Widget _buildPlayerStatsCard(Player player, PlayerStats stats) {
     return Container(
       margin: EdgeInsets.only(bottom: AppConstants.mediumSpacing),
       padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkBackground : AppColors.background,
+        color: AppColors.darkBackground,
         borderRadius: AppConstants.smallBorderRadius,
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.border,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.darkBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,9 +215,7 @@ class PlayerStatsScreen extends StatelessWidget {
                     Text(
                       player.name,
                       style: AppFonts.subtitle1.copyWith(
-                        color: isDark
-                            ? AppColors.darkTextPrimary
-                            : AppColors.textPrimary,
+                        color: AppColors.darkTextPrimary,
                         fontWeight: AppFonts.semiBold,
                       ),
                     ),
@@ -284,41 +262,29 @@ class PlayerStatsScreen extends StatelessWidget {
             SizedBox(height: AppConstants.smallSpacing),
             Row(
               children: [
-                Expanded(
-                  child: _buildStatItem('Runs', '${stats.totalRuns}', isDark),
-                ),
+                Expanded(child: _buildStatItem('Runs', '${stats.totalRuns}')),
                 Expanded(
                   child: _buildStatItem(
                     'Avg',
                     stats.averageRuns.toStringAsFixed(1),
-                    isDark,
                   ),
                 ),
                 Expanded(
                   child: _buildStatItem(
                     'SR',
                     stats.strikeRate.toStringAsFixed(1),
-                    isDark,
                   ),
                 ),
-                Expanded(
-                  child: _buildStatItem('Best', '${stats.bestRuns}', isDark),
-                ),
+                Expanded(child: _buildStatItem('Best', '${stats.bestRuns}')),
               ],
             ),
             SizedBox(height: AppConstants.smallSpacing),
             Row(
               children: [
-                Expanded(
-                  child: _buildStatItem('4s', '${stats.totalFours}', isDark),
-                ),
-                Expanded(
-                  child: _buildStatItem('6s', '${stats.totalSixes}', isDark),
-                ),
-                Expanded(
-                  child: _buildStatItem('Balls', '${stats.totalBalls}', isDark),
-                ),
-                Expanded(child: _buildStatItem('', '', isDark)),
+                Expanded(child: _buildStatItem('4s', '${stats.totalFours}')),
+                Expanded(child: _buildStatItem('6s', '${stats.totalSixes}')),
+                Expanded(child: _buildStatItem('Balls', '${stats.totalBalls}')),
+                Expanded(child: _buildStatItem('', '')),
               ],
             ),
             SizedBox(height: AppConstants.mediumSpacing),
@@ -337,40 +303,27 @@ class PlayerStatsScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: _buildStatItem(
-                    'Wickets',
-                    '${stats.totalWickets}',
-                    isDark,
-                  ),
+                  child: _buildStatItem('Wickets', '${stats.totalWickets}'),
                 ),
-                Expanded(
-                  child: _buildStatItem('Overs', '${stats.totalOvers}', isDark),
-                ),
+                Expanded(child: _buildStatItem('Overs', '${stats.totalOvers}')),
                 Expanded(
                   child: _buildStatItem(
                     'Econ',
                     stats.economyRate.toStringAsFixed(1),
-                    isDark,
                   ),
                 ),
-                Expanded(
-                  child: _buildStatItem('Best', '${stats.bestWickets}', isDark),
-                ),
+                Expanded(child: _buildStatItem('Best', '${stats.bestWickets}')),
               ],
             ),
             SizedBox(height: AppConstants.smallSpacing),
             Row(
               children: [
                 Expanded(
-                  child: _buildStatItem(
-                    'Runs',
-                    '${stats.totalRunsConceded}',
-                    isDark,
-                  ),
+                  child: _buildStatItem('Runs', '${stats.totalRunsConceded}'),
                 ),
-                Expanded(child: _buildStatItem('', '', isDark)),
-                Expanded(child: _buildStatItem('', '', isDark)),
-                Expanded(child: _buildStatItem('', '', isDark)),
+                Expanded(child: _buildStatItem('', '')),
+                Expanded(child: _buildStatItem('', '')),
+                Expanded(child: _buildStatItem('', '')),
               ],
             ),
           ],
@@ -379,13 +332,13 @@ class PlayerStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String label, String value, bool isDark) {
+  Widget _buildStatItem(String label, String value) {
     return Column(
       children: [
         Text(
           value,
           style: AppFonts.bodyText1.copyWith(
-            color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+            color: AppColors.darkTextPrimary,
             fontWeight: AppFonts.semiBold,
           ),
         ),
