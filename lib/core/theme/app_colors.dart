@@ -125,7 +125,7 @@ class AppColors {
   );
 
   static const RadialGradient screenGradient = RadialGradient(
-    center: Alignment(-0.6, 1.35),
+    center: Alignment(-1.4, -0.5),
     radius: 1.2,
     colors: [Color(0xFF242E38), Color(0xFF080209)],
     stops: [0.0, 0.633],

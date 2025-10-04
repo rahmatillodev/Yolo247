@@ -28,10 +28,10 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
       backgroundColor: AppColors.transparent,
       appBar: AppAppBar(title: MockData.matchScoring),
       body: Container(
+        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 48.h),
         decoration: BoxDecoration(gradient: AppColors.screenGradient),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -127,6 +127,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
       children: [
         _buildStatItem(MockData.overs, match["overs"]),
         _buildStatItem(MockData.crr, match["crr"]),
+        _buildStatItem(MockData.rrr, match["rrr"]),
         _buildStatItem(MockData.target, match["target"]),
       ],
     );
@@ -137,7 +138,9 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
       children: [
         Text(
           label,
-          style: AppFonts.regular14Inter.copyWith(color: Colors.white54),
+          style: AppFonts.regular14Inter.copyWith(
+            color: AppColors.primaryLight,
+          ),
         ),
         4.verticalSpace,
         Text(value, style: AppFonts.bold16Inter.copyWith(color: Colors.white)),
@@ -151,20 +154,19 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
       _matchData["run_rate_chart"] ?? [],
     );
 
-    // Agar data bo‘sh bo‘lsa, dummy qiymatlar beramiz
     if (data.isEmpty) {
-      data.addAll([6, 7, 9, 10]);
+      data.addAll([6, 7.5, 3.5, 9]);
     }
 
     final double minY = (data.reduce((a, b) => a < b ? a : b) - 1).clamp(
       0,
       double.infinity,
     );
-    final double maxY = data.reduce((a, b) => a > b ? a : b) + 1;
-    final double interval = ((maxY - minY) / 4).toDouble(); // 4ta bo‘linma
+    final double maxY = data.reduce((a, b) => a > b ? a : b);
+    final double interval = ((maxY - minY) / 4).toDouble();
 
     return Container(
-      height: 120.h,
+      height: 140.h,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
@@ -178,7 +180,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
             show: true,
             drawVerticalLine: false,
             drawHorizontalLine: true,
-            horizontalInterval: interval, // Har 4ta chiziq chiqadi
+            horizontalInterval: interval,
             getDrawingHorizontalLine: (value) =>
                 FlLine(color: Colors.white24, strokeWidth: 1),
           ),
@@ -193,7 +195,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
                   return Text(
                     value.toStringAsFixed(0),
                     style: AppFonts.regular12Inter.copyWith(
-                      color: Colors.white70,
+                      color: AppColors.darkBorder,
                     ),
                     textAlign: TextAlign.center,
                   );
@@ -215,7 +217,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    Colors.greenAccent.withOpacity(0.4),
+                    Colors.greenAccent.withValues(alpha: 0.4),
                     Colors.transparent,
                   ],
                   begin: Alignment.topCenter,
@@ -269,7 +271,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
                           header,
                           textAlign: TextAlign.center,
                           style: AppFonts.regular12Inter.copyWith(
-                            color: Colors.white54,
+                            color: AppColors.primaryLight,
                           ),
                         ),
                       ),
@@ -325,15 +327,20 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
     ),
   );
 
-  // 🔹 Ball Controls + Special Buttons (scrollable)
   Widget _buildBallControls() {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.only(
+        left: 16.w,
+        right: 16.w,
+        top: 16.h,
+        bottom: 56.h,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
         gradient: AppColors.cardGradient,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             MockData.ballControls,
@@ -421,14 +428,9 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
               children: [
                 Text(
                   "${MockData.ball} ${ball["over"]}",
-                  style: AppFonts.regular14Inter.copyWith(
-                    color: Colors.white54,
-                  ),
+                  style: AppFonts.regular14Inter,
                 ),
-                Text(
-                  ball["description"],
-                  style: AppFonts.regular14Inter.copyWith(color: Colors.white),
-                ),
+                Text(ball["description"], style: AppFonts.regular14Inter),
               ],
             ),
           );

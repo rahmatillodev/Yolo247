@@ -149,6 +149,7 @@ class MockData {
       "runRate": "9.05",
       "target": "145",
       "crr": "8.76",
+      "rrr": "9.05",
     },
     "batsmen": [
       {
@@ -209,10 +210,11 @@ class MockData {
   static const String enterPlayerName = 'Enter player name';
   static const String teamSavedSuccessfully = 'Team saved successfully!';
   static const String playerAddedSuccessfully = 'Player added successfully!';
-  static const String ballControls = 'Ball Controls';
+  static const String ballControls = ' Ball-by-Ball Controls';
   static const String scoreCard = 'Score Card';
   static const String overs = 'Overs';
   static const String crr = 'CRR';
+  static const String rrr = 'RRR';
   static const String target = 'Target';
   static const String vs = 'VS';
   static const String ball = 'Ball';

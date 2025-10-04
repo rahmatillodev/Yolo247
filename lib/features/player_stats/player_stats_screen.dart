@@ -42,10 +42,10 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF080209),
+      backgroundColor: AppColors.transparent,
       appBar: AppAppBar(title: "Player Stats"),
       body: Container(
-        decoration: BoxDecoration(gradient: AppColors.darkGradient),
+        decoration: BoxDecoration(gradient: AppColors.screenGradient),
         child: SafeArea(
           child: Padding(
             padding: AppConstants.defaultPadding,
@@ -62,7 +62,7 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
                       vertical: 14.h,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.darkSurface.withOpacity(0.9),
+                      color: AppColors.darkSurface.withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Row(
@@ -71,7 +71,7 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
                           radius: 24,
                           backgroundColor: Colors.white24,
                           child: Icon(
-                            Icons.person,
+                            Icons.person_outline,
                             color: Colors.white,
                             size: 28,
                           ),
@@ -126,7 +126,7 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
     showDialog(
       context: context,
       builder: (_) => Dialog(
-        backgroundColor: AppColors.darkSurface.withOpacity(0.95),
+        backgroundColor: AppColors.darkSurface.withValues(alpha: 0.95),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: EdgeInsets.all(20.w),

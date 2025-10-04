@@ -19,16 +19,14 @@ class NewMatchScreen extends StatefulWidget {
 class _NewMatchScreenState extends State<NewMatchScreen> {
   String? _selectedBattingTeam;
   String? _selectedBowlingTeam;
-  final TextEditingController _oversController = TextEditingController(
-    text: '20',
-  );
+  final TextEditingController _oversController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppAppBar(title: 'New Match', actions: []),
+          appBar: AppAppBar(title: 'New Match'),
           backgroundColor: AppColors.transparent,
           body: Stack(
             children: [
@@ -121,6 +119,7 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
     required ValueChanged<String?> onChanged,
   }) {
     return Container(
+      height: 56.h,
       decoration: BoxDecoration(
         color: AppColors.darkSurfaceLight,
         borderRadius: BorderRadius.circular(10.r),
@@ -135,8 +134,15 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           errorBorder: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
         ),
-        hint: Text(hint, style: TextStyle(color: AppColors.darkTextSecondary)),
+        hint: Text(
+          hint,
+          style: TextStyle(
+            color: AppColors.darkTextSecondary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         style: TextStyle(color: AppColors.darkTextPrimary),
         items: teams.isNotEmpty
             ? teams.map((team) {
@@ -153,6 +159,7 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
 
   Widget _buildTextField() {
     return Container(
+      height: 56.h,
       decoration: BoxDecoration(
         color: AppColors.darkSurfaceLight,
         borderRadius: BorderRadius.circular(10.r),
@@ -163,13 +170,18 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
         controller: _oversController,
         style: TextStyle(color: AppColors.darkTextPrimary),
         keyboardType: TextInputType.number,
+        textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           errorBorder: InputBorder.none,
-          hintText: 'e.g. 20',
-          hintStyle: TextStyle(color: AppColors.darkTextSecondary),
+          hintText: 'eg. 20',
+          hintStyle: TextStyle(
+            color: AppColors.darkTextSecondary,
+            fontWeight: FontWeight.bold,
+          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
         ),
       ),
     );
@@ -207,7 +219,7 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
         height: 56.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          gradient: AppColors.mainGradient,
+          gradient: AppColors.welcomeGradient,
           borderRadius: BorderRadius.circular(30.r),
         ),
         child: Text(

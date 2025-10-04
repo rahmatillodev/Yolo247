@@ -43,7 +43,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
         decoration: BoxDecoration(gradient: AppColors.screenGradient),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 48.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
