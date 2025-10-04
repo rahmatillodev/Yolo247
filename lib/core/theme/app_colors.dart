@@ -45,6 +45,7 @@ class AppColors {
   static const Color warning = Color(0xFFF59E0B); // Orange
   static const Color error = Color(0xFFEF4444); // Red
   static const Color info = Color(0xFF3B82F6); // Blue
+  static const Color textSubc = Color(0xFF6778E3); // Background
 
   // Button Colors
   static const Color buttonPrimary = primary;

@@ -82,8 +82,8 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                       10.verticalSpace,
                       Text(
                         "${widget.match["date"]}  ${widget.match["time"]}",
-                        style: AppFonts.light12Inter.copyWith(
-                          color: AppColors.textSecondary,
+                        style: AppFonts.light14Inter.copyWith(
+                          color: AppColors.textColor,
                         ),
                       ),
                     ],
@@ -104,9 +104,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                     ),
                     Text(
                       widget.match["result"],
-                      style: AppFonts.regular16Inter.copyWith(
-                        color: AppColors.textColor,
-                      ),
+                      style: AppFonts.regular16Inter,
                     ),
                   ],
                 ),
@@ -181,7 +179,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     return Column(
       children: [
         SizedBox(width: 40.w, height: 25.h, child: flag.image()),
-        4.verticalSpace,
+        12.verticalSpace,
         Text(
           team,
           style: AppFonts.semibold16Inter.copyWith(
@@ -308,7 +306,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                           h,
                           textAlign: TextAlign.center,
                           style: AppFonts.regular12Inter.copyWith(
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: AppColors.textSubc,
                           ),
                         ),
                       ),

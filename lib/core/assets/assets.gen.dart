@@ -78,6 +78,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/australia_flag.png
+  AssetGenImage get australiaFlag =>
+      const AssetGenImage('assets/images/australia_flag.png');
+
   /// File path: assets/images/banner.png
   AssetGenImage get banner => const AssetGenImage('assets/images/banner.png');
 
@@ -104,6 +108,10 @@ class $AssetsImagesGen {
   AssetGenImage get newMatch =>
       const AssetGenImage('assets/images/new_match.png');
 
+  /// File path: assets/images/pakistan_flag.png
+  AssetGenImage get pakistanFlag =>
+      const AssetGenImage('assets/images/pakistan_flag.png');
+
   /// File path: assets/images/statistics.png
   AssetGenImage get statistics =>
       const AssetGenImage('assets/images/statistics.png');
@@ -118,12 +126,16 @@ class $AssetsImagesGen {
   AssetGenImage get teamFlag =>
       const AssetGenImage('assets/images/team_flag.png');
 
+  /// File path: assets/images/uk_flag.png
+  AssetGenImage get ukFlag => const AssetGenImage('assets/images/uk_flag.png');
+
   /// File path: assets/images/welcome_background.png
   AssetGenImage get welcomeBackground =>
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    australiaFlag,
     banner,
     bannerBackground,
     history,
@@ -131,10 +143,12 @@ class $AssetsImagesGen {
     indiaFlag,
     matchBackground,
     newMatch,
+    pakistanFlag,
     statistics,
     team,
     team2,
     teamFlag,
+    ukFlag,
     welcomeBackground,
   ];
 }

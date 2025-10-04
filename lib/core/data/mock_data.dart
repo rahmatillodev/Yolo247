@@ -140,9 +140,9 @@ class MockData {
   static final Map<String, dynamic> matchScoringData = {
     "match": {
       "teamA": "India",
-      "teamAFlag": Assets.images.teamFlag,
+      "teamAFlag": Assets.images.indiaFlag,
       "teamB": "Pakistan",
-      "teamBFlag": Assets.images.teamFlag,
+      "teamBFlag": Assets.images.pakistanFlag,
       "scoreA": "142/3",
       "scoreB": "138/8",
       "overs": "15.4",
