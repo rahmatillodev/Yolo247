@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yolo247/core/bloc/app_state.dart';
 import 'package:yolo247/core/cubit/app_cubit.dart';
+import 'package:yolo247/core/cubit/app_state.dart';
 import 'package:yolo247/core/models/team.dart';
 import 'package:yolo247/core/theme/app_colors.dart';
 import 'package:yolo247/core/widgets/app_app_bar.dart';
@@ -210,11 +210,11 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
           gradient: AppColors.mainGradient,
           borderRadius: BorderRadius.circular(30.r),
         ),
-        child: const Text(
+        child: Text(
           'Start Match',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
         ),

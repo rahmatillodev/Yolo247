@@ -1,352 +1,194 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../core/bloc/app_state.dart';
 import '../../core/constants/app_constants.dart';
-import '../../core/cubit/app_cubit.dart';
-import '../../core/models/player.dart';
-import '../../core/models/player_stats.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_fonts.dart';
 import '../../core/widgets/app_app_bar.dart';
 
-class PlayerStatsScreen extends StatelessWidget {
+class PlayerStatsScreen extends StatefulWidget {
   const PlayerStatsScreen({super.key});
+
+  @override
+  State<PlayerStatsScreen> createState() => _PlayerStatsScreenState();
+}
+
+class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
+  final List<Map<String, dynamic>> players = [
+    {
+      "name": "Rohit Sharma",
+      "matches": 12,
+      "runs": 340,
+      "avg": 28.3,
+      "wickets": 2,
+      "best": "85",
+      "fours": 42,
+      "sixes": 12,
+      "strikeRate": 134.5,
+    },
+    {
+      "name": "Virat Kohli",
+      "matches": 14,
+      "runs": 620,
+      "avg": 44.2,
+      "wickets": 0,
+      "best": "110*",
+      "fours": 58,
+      "sixes": 19,
+      "strikeRate": 141.3,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBackground,
-
+      backgroundColor: const Color(0xFF080209),
       appBar: AppAppBar(title: "Player Stats"),
-      body: BlocConsumer<AppCubit, AppState>(
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: AppColors.error,
-              ),
-            );
-            context.read<AppCubit>().clearError();
-          }
-        },
-        builder: (context, state) {
-          return SafeArea(
-            child: Padding(
-              padding: AppConstants.defaultPadding,
-              child: Column(
-                children: [
-                  _buildHeader(),
-                  SizedBox(height: AppConstants.largeSpacing),
-                  Expanded(
-                    child: _buildPlayerList(state.players, state.playerStats),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.darkShadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.bar_chart, size: 48.w, color: AppColors.primary),
-          SizedBox(height: AppConstants.mediumSpacing),
-          Text(
-            "Player Stats",
-            style: AppFonts.headline5.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: AppFonts.bold,
-            ),
-          ),
-          SizedBox(height: AppConstants.smallSpacing),
-          Text(
-            'View player performance statistics',
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPlayerList(List<Player> players, List<PlayerStats> playerStats) {
-    if (players.isEmpty || playerStats.isEmpty) {
-      return _buildEmptyState();
-    }
-
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
+      body: Container(
+        decoration: BoxDecoration(gradient: AppColors.darkGradient),
+        child: SafeArea(
+          child: Padding(
             padding: AppConstants.defaultPadding,
-            child: Text(
-              'Player Statistics',
-              style: AppFonts.subtitle1.copyWith(
-                color: AppColors.darkTextPrimary,
-                fontWeight: AppFonts.semiBold,
-              ),
-            ),
-          ),
-          Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              itemCount: playerStats.length,
+              itemCount: players.length,
               itemBuilder: (context, index) {
-                final stats = playerStats[index];
-                final player = players.firstWhere(
-                  (p) => p.id == stats.playerId,
-                  orElse: () => Player.create(
-                    name: 'Unknown',
-                    role: 'Unknown',
-                    teamId: '',
+                final player = players[index];
+                return GestureDetector(
+                  onTap: () => _showPlayerDetails(context, player),
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 14.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 14.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.darkSurface.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.white24,
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        SizedBox(width: 14.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                player["name"],
+                                style: AppFonts.bodyText1.copyWith(
+                                  color: AppColors.textWhite,
+                                  fontWeight: AppFonts.bold,
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Matches: ${player["matches"]}",
+                                    style: AppFonts.bodyText2.copyWith(
+                                      color: Color(0xff92A1FF),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Runs: ${player["runs"]}",
+                                    style: AppFonts.bodyText2.copyWith(
+                                      color: Color(0xff92A1FF),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
-                return _buildPlayerStatsCard(player, stats);
               },
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildEmptyState() {
-    return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.person_outline,
-            size: 64.w,
-            color: AppColors.textSecondary,
-          ),
-          SizedBox(height: AppConstants.largeSpacing),
-          Text(
-            'No player statistics available',
-            style: AppFonts.headline6.copyWith(color: AppColors.textSecondary),
-          ),
-          SizedBox(height: AppConstants.mediumSpacing),
-          Text(
-            'Player statistics will appear here once matches are played.',
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPlayerStatsCard(Player player, PlayerStats stats) {
-    return Container(
-      margin: EdgeInsets.only(bottom: AppConstants.mediumSpacing),
-      padding: AppConstants.defaultPadding,
-      decoration: BoxDecoration(
-        color: AppColors.darkBackground,
-        borderRadius: AppConstants.smallBorderRadius,
-        border: Border.all(color: AppColors.darkBorder, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Player Header
-          Row(
+  void _showPlayerDetails(BuildContext context, Map<String, dynamic> player) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: AppColors.darkSurface.withOpacity(0.95),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              CircleAvatar(
-                radius: 20.r,
-                backgroundColor: AppColors.primary.withOpacity(0.1),
-                child: Text(
-                  player.name.substring(0, 1).toUpperCase(),
-                  style: AppFonts.subtitle1.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: AppFonts.bold,
-                  ),
+              Text(
+                player["name"],
+                style: AppFonts.headline6.copyWith(
+                  color: AppColors.textWhite,
+                  fontWeight: AppFonts.bold,
                 ),
               ),
-              SizedBox(width: AppConstants.mediumSpacing),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      player.name,
-                      style: AppFonts.subtitle1.copyWith(
-                        color: AppColors.darkTextPrimary,
-                        fontWeight: AppFonts.semiBold,
-                      ),
+              SizedBox(height: 14.h),
+              _statRow("Matches", player["matches"].toString()),
+              _statRow("Total Runs", player["runs"].toString()),
+              _statRow("Avg. Runs", player["avg"].toString()),
+              _statRow("Wickets", player["wickets"].toString()),
+              _statRow("Best", player["best"].toString()),
+              _statRow("4s", player["fours"].toString()),
+              _statRow("6s", player["sixes"].toString()),
+              _statRow("Strike Rate", "${player["strikeRate"]}%"),
+              SizedBox(height: 20.h),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "Close",
+                    style: AppFonts.bodyText2.copyWith(
+                      color: Colors.redAccent,
+                      fontWeight: AppFonts.bold,
                     ),
-                    Text(
-                      player.role,
-                      style: AppFonts.bodyText2.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppConstants.smallSpacing,
-                  vertical: 4.h,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: AppConstants.smallBorderRadius,
-                ),
-                child: Text(
-                  '${stats.totalMatches} matches',
-                  style: AppFonts.caption.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: AppFonts.semiBold,
                   ),
                 ),
               ),
             ],
           ),
-
-          SizedBox(height: AppConstants.mediumSpacing),
-
-          // Batting Stats
-          if (stats.totalRuns > 0) ...[
-            Text(
-              'Batting',
-              style: AppFonts.bodyText2.copyWith(
-                color: AppColors.primary,
-                fontWeight: AppFonts.semiBold,
-              ),
-            ),
-            SizedBox(height: AppConstants.smallSpacing),
-            Row(
-              children: [
-                Expanded(child: _buildStatItem('Runs', '${stats.totalRuns}')),
-                Expanded(
-                  child: _buildStatItem(
-                    'Avg',
-                    stats.averageRuns.toStringAsFixed(1),
-                  ),
-                ),
-                Expanded(
-                  child: _buildStatItem(
-                    'SR',
-                    stats.strikeRate.toStringAsFixed(1),
-                  ),
-                ),
-                Expanded(child: _buildStatItem('Best', '${stats.bestRuns}')),
-              ],
-            ),
-            SizedBox(height: AppConstants.smallSpacing),
-            Row(
-              children: [
-                Expanded(child: _buildStatItem('4s', '${stats.totalFours}')),
-                Expanded(child: _buildStatItem('6s', '${stats.totalSixes}')),
-                Expanded(child: _buildStatItem('Balls', '${stats.totalBalls}')),
-                Expanded(child: _buildStatItem('', '')),
-              ],
-            ),
-            SizedBox(height: AppConstants.mediumSpacing),
-          ],
-
-          // Bowling Stats
-          if (stats.totalWickets > 0) ...[
-            Text(
-              'Bowling',
-              style: AppFonts.bodyText2.copyWith(
-                color: AppColors.secondary,
-                fontWeight: AppFonts.semiBold,
-              ),
-            ),
-            SizedBox(height: AppConstants.smallSpacing),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildStatItem('Wickets', '${stats.totalWickets}'),
-                ),
-                Expanded(child: _buildStatItem('Overs', '${stats.totalOvers}')),
-                Expanded(
-                  child: _buildStatItem(
-                    'Econ',
-                    stats.economyRate.toStringAsFixed(1),
-                  ),
-                ),
-                Expanded(child: _buildStatItem('Best', '${stats.bestWickets}')),
-              ],
-            ),
-            SizedBox(height: AppConstants.smallSpacing),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildStatItem('Runs', '${stats.totalRunsConceded}'),
-                ),
-                Expanded(child: _buildStatItem('', '')),
-                Expanded(child: _buildStatItem('', '')),
-                Expanded(child: _buildStatItem('', '')),
-              ],
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: AppFonts.bodyText1.copyWith(
-            color: AppColors.darkTextPrimary,
-            fontWeight: AppFonts.semiBold,
+  Widget _statRow(String title, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: AppFonts.bodyText2.copyWith(color: AppColors.textWhite),
           ),
-        ),
-        Text(
-          label,
-          style: AppFonts.caption.copyWith(color: AppColors.textSecondary),
-        ),
-      ],
+          Text(
+            value,
+            style: AppFonts.bodyText2.copyWith(
+              color: AppColors.primary,
+              fontWeight: AppFonts.semiBold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

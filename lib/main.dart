@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yolo247/core/bloc/app_bloc_impl.dart';
+import 'package:yolo247/core/cubit/app_cubit.dart';
 import 'package:yolo247/core/routes/app_routes.dart';
-
-import 'core/cubit/app_cubit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,11 +27,8 @@ class MainApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => AppCubit()),
-            BlocProvider(create: (context) => AppBloc()),
-          ],
+        return BlocProvider(
+          create: (context) => AppCubit(),
           child: MaterialApp(
             title: 'Yolo247 Cricket Score Counter',
             debugShowCheckedModeBanner: false,

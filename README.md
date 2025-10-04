@@ -2,16 +2,16 @@
 
 A comprehensive Flutter application for tracking cricket matches, managing teams, and maintaining player statistics. Built with modern Flutter architecture using BLoC pattern for state management.
 
-## Features
+## 🏏 Features
 
-### 🏏 Core Functionality
+### Core Functionality
 - **Live Match Scoring**: Real-time score tracking with ball-by-ball updates
 - **Team Management**: Create and manage cricket teams with player rosters
 - **Player Statistics**: Comprehensive player performance tracking
 - **Match History**: Complete match records with detailed statistics
 - **Offline Support**: Fully functional without internet connection
 
-### 📱 Screens
+### Screens
 1. **Splash Screen**: App loading with animated logo
 2. **Welcome Screen**: Introduction and getting started
 3. **Home Screen**: Main navigation hub with quick access to features
@@ -24,39 +24,42 @@ A comprehensive Flutter application for tracking cricket matches, managing teams
 10. **Player Stats**: Individual player performance metrics
 11. **Match Summary**: Post-match summary with key highlights
 
-### 🎨 Design Features
+### Design Features
 - **Yolo247 Brand Colors**: Custom color scheme with cricket field aesthetics
 - **Responsive Design**: Optimized for all screen sizes using ScreenUtil
 - **Smooth Animations**: Engaging transitions and micro-interactions
 - **Modern UI**: Clean, intuitive interface following Material Design principles
 
-## Technical Architecture
+## 🏗️ Technical Architecture
 
-### 🏗️ Project Structure
+### Project Structure
 ```
 lib/
 ├── core/
-│   ├── bloc/           # State management (BLoC pattern)
-│   ├── constants/      # App constants and text
-│   ├── models/         # Data models
-│   ├── theme/          # App theme, colors, and fonts
-│   └── assets/         # Asset management
-├── features/           # Feature-based modules
-│   ├── splash/         # Splash screen
-│   ├── welcome/        # Welcome screen
-│   ├── home/           # Home screen
-│   ├── new_match/      # New match setup
-│   ├── match_scoring/  # Live scoring
-│   ├── match_history/  # Match history
-│   ├── match_details/  # Match details
-│   ├── team_management/# Team management
+│   ├── cubit/           # State management (Cubit pattern)
+│   ├── constants/       # App constants and text
+│   ├── models/          # Data models
+│   ├── theme/           # App theme, colors, and fonts
+│   ├── routes/          # Navigation routes
+│   ├── widgets/         # Shared widgets
+│   ├── data/            # Mock data and constants
+│   └── assets/          # Asset management
+├── features/            # Feature-based modules
+│   ├── splash/          # Splash screen
+│   ├── welcome/         # Welcome screen
+│   ├── home/            # Home screen
+│   ├── new_match/       # New match setup
+│   ├── match_scoring/   # Live scoring
+│   ├── match_history/   # Match history
+│   ├── match_details/   # Match details
+│   ├── team_management/ # Team management
 │   ├── create_edit_team/# Team creation/editing
-│   ├── player_stats/   # Player statistics
-│   └── match_summary/  # Match summary
-└── main.dart          # App entry point
+│   ├── player_stats/    # Player statistics
+│   └── match_summary/   # Match summary
+└── main.dart           # App entry point
 ```
 
-### 🔧 Dependencies
+### Dependencies
 - **flutter_bloc**: State management
 - **flutter_screenutil**: Responsive design
 - **fl_chart**: Data visualization
@@ -66,15 +69,16 @@ lib/
 - **equatable**: Value equality
 - **uuid**: Unique ID generation
 - **intl**: Internationalization
+- **google_fonts**: Typography
 
-### 📊 Data Models
+### Data Models
 - **Team**: Team information and player lists
 - **Player**: Individual player data
 - **Match**: Match details and scoring
 - **PlayerStats**: Player performance statistics
 - **BallEvent**: Individual ball events
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Flutter SDK (3.8.1 or higher)
@@ -98,11 +102,11 @@ lib/
    flutter run
    ```
 
-## Usage
+## 📱 Usage
 
 ### Creating Teams
 1. Navigate to "Teams" from the home screen
-2. Tap "Add New Team"
+2. Tap "Create Team"
 3. Enter team name and add players
 4. Save the team
 
@@ -124,42 +128,134 @@ lib/
 2. Check "Match History" for completed matches
 3. View detailed match information by tapping on matches
 
-## Features in Detail
+## 🎨 Design System
 
-### Live Scoring System
-- **Ball-by-ball tracking**: Record every delivery with runs, wickets, and extras
-- **Real-time updates**: Instant score updates and statistics
-- **Special events**: Support for wides, no balls, byes, leg byes, and wickets
-- **Undo functionality**: Reverse last ball event if needed
-- **Batsman swapping**: Change strike during the match
+### Colors
+The app uses a comprehensive color system defined in `lib/core/theme/app_colors.dart`:
 
-### Statistics Tracking
-- **Player performance**: Runs, balls faced, strike rate, fours, sixes
-- **Bowling stats**: Overs bowled, runs conceded, wickets taken, economy rate
-- **Match summaries**: Best batsman, best bowler, key statistics
-- **Historical data**: Complete match history with detailed records
-
-### Team Management
-- **Flexible rosters**: Add/remove players from teams
-- **Player roles**: Assign specific roles (batsman, bowler, all-rounder, wicket-keeper)
-- **Team statistics**: Track team performance across matches
-
-## Customization
-
-### Brand Colors
-The app uses Yolo247 brand colors defined in `lib/core/theme/app_colors.dart`:
-- Primary: Dark Green (#1B5E20)
-- Secondary: Gold (#FFD700)
-- Field Green: Cricket field colors
-- Custom gradients and accent colors
+- **Primary Colors**: Cricket Blue (#1E3A8A), Light Blue (#3B82F6)
+- **Secondary Colors**: Cricket Gold (#FFA726), Light Gold (#FFCC02)
+- **Field Colors**: Cricket Field Green (#22C55E)
+- **Dark Theme**: Dark Background (#0A0E27), Dark Surface (#1A1F3A)
+- **Status Colors**: Success (#10B981), Warning (#F59E0B), Error (#EF4444)
 
 ### Typography
-Custom font styles defined in `lib/core/theme/app_fonts.dart`:
-- Responsive font sizes
-- Cricket-specific text styles
-- Consistent typography hierarchy
+All fonts use GoogleFonts with ScreenUtil integration:
 
-## Contributing
+- **Primary Font**: Inter (GoogleFonts)
+- **Special Fonts**: Kaushan Script, Afacad
+- **Font Sizes**: All sizes use `.sp` extension for responsive scaling
+- **Font Weights**: Light (300) to Black (900)
+
+### Responsive Design
+All dimensions use ScreenUtil for consistent scaling:
+
+- **Width**: `.w` extension (e.g., `100.w`)
+- **Height**: `.h` extension (e.g., `50.h`)
+- **Font Size**: `.sp` extension (e.g., `16.sp`)
+
+## 🔧 State Management
+
+### Cubit Pattern
+The app uses Cubit for state management with a single `AppCubit` that handles:
+
+- **Teams**: CRUD operations for team management
+- **Players**: CRUD operations for player management
+- **Matches**: Match creation, scoring, and completion
+- **Player Stats**: Statistics tracking and updates
+
+### State Structure
+```dart
+class AppState {
+  final List<Team> teams;
+  final List<Player> players;
+  final List<Match> matches;
+  final List<PlayerStats> playerStats;
+  final Match? currentMatch;
+  final bool isLoading;
+  final String? errorMessage;
+  final String? successMessage;
+}
+```
+
+### Data Persistence
+- Uses SharedPreferences for local data storage
+- Mock data is loaded when no data exists
+- All CRUD operations are persisted automatically
+
+## 📊 Mock Data
+
+### Centralized Data Management
+All mock data is centralized in `lib/core/data/mock_data.dart`:
+
+- **Teams**: Pre-defined cricket teams (India, Pakistan, Australia, England)
+- **Players**: Sample players with roles and team assignments
+- **Matches**: Sample match data for testing
+- **Player Stats**: Sample statistics for demonstration
+- **Constants**: All text strings and UI constants
+
+### Usage
+```dart
+// Access mock data
+final teams = MockData.mockTeams;
+final players = MockData.mockPlayers;
+final matchData = MockData.matchScoringData;
+
+// Access constants
+final title = MockData.appTitle;
+final errorMessage = MockData.failedToLoadTeams;
+```
+
+## 🛠️ Development Guidelines
+
+### Code Organization
+- **Feature-based structure**: Each feature has its own directory
+- **Core utilities**: Shared code in `core/` directory
+- **Consistent naming**: snake_case for files, PascalCase for classes
+- **Proper imports**: Organized and grouped imports
+
+### State Management Best Practices
+- Use BlocBuilder for UI updates
+- Handle loading and error states
+- Provide user feedback for actions
+- Use proper error handling
+
+### UI/UX Guidelines
+- Use ScreenUtil for all dimensions
+- Follow Material Design principles
+- Implement proper loading states
+- Provide clear user feedback
+
+## 🧪 Testing
+
+### Running Tests
+```bash
+flutter test
+```
+
+### Test Coverage
+- Unit tests for business logic
+- Widget tests for UI components
+- Integration tests for user flows
+
+## 📦 Build and Deployment
+
+### Android
+```bash
+flutter build apk --release
+```
+
+### iOS
+```bash
+flutter build ios --release
+```
+
+### Web
+```bash
+flutter build web --release
+```
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -167,14 +263,39 @@ Custom font styles defined in `lib/core/theme/app_fonts.dart`:
 4. Run tests and ensure code quality
 5. Submit a pull request
 
-## License
+### Code Style
+- Follow Dart/Flutter conventions
+- Use meaningful variable names
+- Add comments for complex logic
+- Ensure proper error handling
+
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Support
+## 🆘 Support
 
 For support and questions, please contact the development team or create an issue in the repository.
+
+## 🔄 Changelog
+
+### Version 1.0.0
+- Initial release with core functionality
+- Team management system
+- Live match scoring
+- Player statistics tracking
+- Responsive design implementation
+- State management with Cubit
+- Mock data integration
 
 ---
 
 **Cricket Score Counter** - Making cricket scoring effortless and enjoyable! 🏏
+
+## 📞 Contact
+
+For any questions or support, please reach out to the development team.
+
+---
+
+*Built with ❤️ using Flutter*

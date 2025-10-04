@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yolo247/core/assets/assets.gen.dart';
 import 'package:yolo247/core/widgets/app_buttons.dart';
 
@@ -29,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Kaushan Script',
-                          fontSize: 32,
+                          fontSize: 32.sp,
                           color: AppColors.textWhite,
                         ),
                       )
@@ -41,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Kaushan Script',
-                          fontSize: 32,
+                          fontSize: 32.sp,
                           color: AppColors.textWhite,
                         ),
                       )
@@ -51,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   Text(
                         'Track matches, manage teams,\nand keep your cricket scores effortlessly.',
                         textAlign: TextAlign.center,
-                        style: AppFonts.size20weight500fontInter.copyWith(
+                        style: AppFonts.subtitle1.copyWith(
                           color: AppColors.textWhite,
                         ),
                       )

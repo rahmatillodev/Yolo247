@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yolo247/core/assets/assets.gen.dart';
+import 'package:yolo247/core/data/mock_data.dart';
 import 'package:yolo247/core/theme/app_colors.dart';
 import 'package:yolo247/core/theme/app_fonts.dart';
 import 'package:yolo247/core/widgets/app_app_bar.dart';
@@ -16,56 +17,8 @@ class MatchScoringScreen extends StatefulWidget {
 class _MatchScoringScreenState extends State<MatchScoringScreen> {
   int _selectedRun = 0;
 
-  /// 🔹 Umumiy mock data (match + player + score)
-  final Map<String, dynamic> _matchData = {
-    "match": {
-      "teamA": "India",
-      "teamAFlag": Assets.images.teamFlag,
-      "teamB": "Pakistan",
-      "teamBFlag": Assets.images.teamFlag,
-      "scoreA": "142/3",
-      "scoreB": "138/8",
-      "overs": "15.4",
-      "runRate": "9.05",
-      "target": "145",
-      "crr": "8.76",
-    },
-    "batsmen": [
-      {
-        "name": "Rohit",
-        "runs": 48,
-        "balls": 32,
-        "fours": 6,
-        "sixes": 2,
-        "strike_rate": 150.0,
-      },
-      {
-        "name": "Rahul",
-        "runs": 30,
-        "balls": 24,
-        "fours": 3,
-        "sixes": 1,
-        "strike_rate": 125.0,
-      },
-    ],
-    "bowlers": [
-      {
-        "name": "Shaheen",
-        "overs": 3.4,
-        "runs": 27,
-        "wickets": 1,
-        "economy": 7.36,
-      },
-      {"name": "Rauf", "overs": 4.0, "runs": 34, "wickets": 2, "economy": 8.50},
-    ],
-    "ball_history": [
-      {"over": 15.1, "description": "1 run"},
-      {"over": 15.2, "description": "4 runs"},
-      {"over": 15.3, "description": "2 runs"},
-      {"over": 15.4, "description": "Wicket"},
-    ],
-    "run_rate_chart": [10.5, 9.8, 9.1, 8.7],
-  };
+  /// Use centralized mock data
+  final Map<String, dynamic> _matchData = MockData.matchScoringData;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +26,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.transparent,
-      appBar: AppAppBar(title: "Match Scoring"),
+      appBar: AppAppBar(title: MockData.matchScoring),
       body: Container(
         decoration: BoxDecoration(gradient: AppColors.screenGradient),
         child: SafeArea(
@@ -90,20 +43,20 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
                 20.verticalSpace,
                 _buildPlayerSection(
                   title: "Batsmen",
-                  headers: const ["Player", "R", "B", "4s", "6s", "SR"],
+                  headers: MockData.batsmanHeaders,
                   players: _matchData["batsmen"],
                 ),
                 12.verticalSpace,
                 _buildPlayerSection(
                   title: "Bowlers",
-                  headers: const ["Bowler", "O", "R", "W", "ER"],
+                  headers: MockData.bowlerHeaders,
                   players: _matchData["bowlers"],
                 ),
                 20.verticalSpace,
                 _buildBallControls(),
                 24.verticalSpace,
                 Text(
-                  "Score Card",
+                  MockData.scoreCard,
                   style: AppFonts.semibold16Inter.copyWith(color: Colors.white),
                 ),
                 8.verticalSpace,
@@ -137,7 +90,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
             match["scoreA"],
           ),
           Text(
-            "VS",
+            MockData.vs,
             style: AppFonts.semibold16Inter.copyWith(
               color: AppColors.textColor,
             ),
@@ -172,9 +125,9 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildStatItem("Overs", match["overs"]),
-        _buildStatItem("CRR", match["crr"]),
-        _buildStatItem("Target", match["target"]),
+        _buildStatItem(MockData.overs, match["overs"]),
+        _buildStatItem(MockData.crr, match["crr"]),
+        _buildStatItem(MockData.target, match["target"]),
       ],
     );
   }
@@ -374,7 +327,6 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
 
   // 🔹 Ball Controls + Special Buttons (scrollable)
   Widget _buildBallControls() {
-    final specialButtons = ["Wide", "No Ball", "Wicket", "Byes", "Leg Byes"];
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -384,7 +336,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
       child: Column(
         children: [
           Text(
-            "Ball Controls",
+            MockData.ballControls,
             style: AppFonts.semibold16Inter.copyWith(color: Colors.white),
           ),
           12.verticalSpace,
@@ -392,22 +344,22 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: List.generate(7, (index) {
+              children: MockData.runOptions.map((run) {
                 return GestureDetector(
-                  onTap: () => setState(() => _selectedRun = index),
+                  onTap: () => setState(() => _selectedRun = run),
                   child: Container(
                     margin: EdgeInsets.only(right: 8.w),
                     width: 40.w,
                     height: 40.h,
                     decoration: BoxDecoration(
-                      color: _selectedRun == index
+                      color: _selectedRun == run
                           ? AppColors.primary
                           : Colors.white24,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Center(
                       child: Text(
-                        index.toString(),
+                        run.toString(),
                         style: AppFonts.bold16Inter.copyWith(
                           color: Colors.white,
                         ),
@@ -415,7 +367,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
                     ),
                   ),
                 );
-              }),
+              }).toList(),
             ),
           ),
           12.verticalSpace,
@@ -423,7 +375,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: specialButtons.map((button) {
+              children: MockData.specialBallEvents.map((button) {
                 return Container(
                   margin: EdgeInsets.only(right: 8.w),
                   padding: EdgeInsets.symmetric(
@@ -468,7 +420,7 @@ class _MatchScoringScreenState extends State<MatchScoringScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Ball ${ball["over"]}",
+                  "${MockData.ball} ${ball["over"]}",
                   style: AppFonts.regular14Inter.copyWith(
                     color: Colors.white54,
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yolo247/core/assets/assets.gen.dart';
+import 'package:yolo247/core/data/mock_data.dart';
+import 'package:yolo247/core/routes/app_routes.dart';
 import 'package:yolo247/core/theme/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,85 +10,84 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.darkBackground,
 
-        return Scaffold(
-          backgroundColor: AppColors.darkBackground,
-              
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // Header
-                  _buildHeader(context, ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header
+              _buildHeader(context),
 
               // Hero Section
               _buildHeroSection(context),
 
               20.verticalSpace,
 
-                  // Menu Grid
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
+              // Menu Grid
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildMenuCard(
-                                context: context,
-                                title: "New Match",
-                                iconPath: Assets.images.newMatch.path,
-                                onTap: () =>
-                                    Navigator.pushNamed(context, '/new-match'),
-                              ),
-                            ),
-                            SizedBox(width: 16.w),
-                            Expanded(
-                              child: _buildMenuCard(
-                                context: context,
-                                title: "Match History",
-                                iconPath: Assets.images.historyIcon.path,
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  '/match-history',
-                                ),
-                              ),
-                            ),
-                          ],
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: MockData.newMatch,
+                            iconPath: Assets.images.newMatch.path,
+                            onTap: () =>
+                                Navigator.pushNamed(context, Routes.newMatch),
+                          ),
                         ),
-                        SizedBox(height: 16.h),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildMenuCard(
-                                context: context,
-                                title: "Teams",
-                                iconPath: Assets.images.team.path,
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  '/team-management',
-                                ),
-                              ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: MockData.matchHistory,
+                            iconPath: Assets.images.historyIcon.path,
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              Routes.matchHistory,
                             ),
-                            SizedBox(width: 16.w),
-                            Expanded(
-                              child: _buildMenuCard(
-                                context: context,
-                                title: "Player Stats",
-                                iconPath: Assets.images.statistics.path,
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  '/player-stats',
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        16.verticalSpace,
-                        _buildMatchSummaryCard(context, ),
                       ],
                     ),
-                  ),
+                    SizedBox(height: 16.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: MockData.teams,
+                            iconPath: Assets.images.team.path,
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              Routes.teamManagement,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: _buildMenuCard(
+                            context: context,
+                            title: MockData.playerStats,
+                            iconPath: Assets.images.statistics.path,
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              Routes.playerStats,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    16.verticalSpace,
+                    _buildMatchSummaryCard(context),
+                  ],
+                ),
+              ),
 
               20.verticalSpace,
             ],
@@ -181,12 +182,12 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
                       TextSpan(
                         text: 'Score ',
                         style: TextStyle(
-                          fontSize: 36,
+                          fontSize: 36.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -202,7 +203,7 @@ class HomeScreen extends StatelessWidget {
                       TextSpan(
                         text: 'Run.',
                         style: TextStyle(
-                          fontSize: 36,
+                          fontSize: 36.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -211,15 +212,15 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Track Every Ball.',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 24.sp,
                     color: Colors.white70,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 Container(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
@@ -237,7 +238,8 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   child: ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/new-match'),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, Routes.newMatch),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
@@ -249,10 +251,10 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(73),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Start New Match',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
@@ -299,11 +301,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              iconPath,
-              width: 48.w,
-              height: 48.w,
-            ),
+            Image.asset(iconPath, width: 48.w, height: 48.w),
             SizedBox(height: 12.h),
             Text(
               title,
@@ -323,7 +321,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildMatchSummaryCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/match-summary');
+        Navigator.pushNamed(context, Routes.matchSummary);
       },
       child: Container(
         width: double.infinity,
@@ -342,7 +340,7 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(width: 16.w),
             Text(
-              'Match Summary',
+              MockData.matchSummary,
               style: TextStyle(
                 color: AppColors.darkTextPrimary,
                 fontSize: 20.sp,

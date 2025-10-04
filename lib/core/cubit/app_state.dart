@@ -1,8 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../models/team.dart';
+
+import '../models/match.dart';
 import '../models/player.dart';
 import '../models/player_stats.dart';
-import '../models/match.dart';
+import '../models/team.dart';
 
 part 'app_state.freezed.dart';
 

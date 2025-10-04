@@ -11,6 +11,16 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/KaushanScript-Regular.ttf
+  String get kaushanScriptRegular => 'assets/fonts/KaushanScript-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [kaushanScriptRegular];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -132,6 +142,7 @@ class $AssetsImagesGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

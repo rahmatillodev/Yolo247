@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../bloc/app_state.dart';
+import '../data/mock_data.dart';
 import '../models/match.dart';
 import '../models/player.dart';
 import '../models/player_stats.dart';
 import '../models/team.dart';
+import 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState()) {
@@ -32,7 +33,7 @@ class AppCubit extends Cubit<AppState> {
       List<Team> teams;
       if (teamsJson.isEmpty) {
         // Load mock data if no teams exist
-        teams = [];
+        teams = MockData.mockTeams;
         await _saveTeams(teams);
       } else {
         teams = teamsJson
@@ -45,7 +46,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to load teams: $e',
+          errorMessage: '${MockData.failedToLoadTeams}: $e',
         ),
       );
     }
@@ -64,14 +65,14 @@ class AppCubit extends Cubit<AppState> {
         state.copyWith(
           teams: updatedTeams,
           isLoading: false,
-          successMessage: 'Team created successfully!',
+          successMessage: MockData.teamCreatedSuccessfully,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to create team: $e',
+          errorMessage: '${MockData.failedToCreateTeam}: $e',
         ),
       );
     }
@@ -98,7 +99,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to update team: $e',
+          errorMessage: '${MockData.failedToUpdateTeam}: $e',
         ),
       );
     }
@@ -125,7 +126,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to delete team: $e',
+          errorMessage: '${MockData.failedToDeleteTeam}: $e',
         ),
       );
     }
@@ -142,7 +143,7 @@ class AppCubit extends Cubit<AppState> {
       List<Player> players;
       if (playersJson.isEmpty) {
         // Load mock data if no players exist
-        players = [];
+        players = MockData.mockPlayers;
         await _savePlayers(players);
       } else {
         players = playersJson
@@ -155,7 +156,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to load players: $e',
+          errorMessage: '${MockData.failedToLoadPlayers}: $e',
         ),
       );
     }
@@ -174,14 +175,14 @@ class AppCubit extends Cubit<AppState> {
         state.copyWith(
           players: updatedPlayers,
           isLoading: false,
-          successMessage: 'Player added successfully!',
+          successMessage: MockData.playerAddedSuccessfully,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to add player: $e',
+          errorMessage: '${MockData.failedToAddPlayer}: $e',
         ),
       );
     }
@@ -208,7 +209,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to update player: $e',
+          errorMessage: '${MockData.failedToUpdatePlayer}: $e',
         ),
       );
     }
@@ -235,7 +236,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to delete player: $e',
+          errorMessage: '${MockData.failedToDeletePlayer}: $e',
         ),
       );
     }
@@ -264,7 +265,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to load matches: $e',
+          errorMessage: '${MockData.failedToLoadMatches}: $e',
         ),
       );
     }
@@ -294,14 +295,14 @@ class AppCubit extends Cubit<AppState> {
         state.copyWith(
           currentMatch: newMatch,
           isLoading: false,
-          successMessage: 'Match started successfully!',
+          successMessage: MockData.matchStartedSuccessfully,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to start match: $e',
+          errorMessage: '${MockData.failedToStartMatch}: $e',
         ),
       );
     }
@@ -314,7 +315,9 @@ class AppCubit extends Cubit<AppState> {
       final updatedMatch = state.currentMatch!.addBallEvent(ballEvent);
       emit(state.copyWith(currentMatch: updatedMatch));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Failed to add ball event: $e'));
+      emit(
+        state.copyWith(errorMessage: '${MockData.failedToAddBallEvent}: $e'),
+      );
     }
   }
 
@@ -325,7 +328,9 @@ class AppCubit extends Cubit<AppState> {
       final updatedMatch = state.currentMatch!.undoLastBallEvent();
       emit(state.copyWith(currentMatch: updatedMatch));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Failed to undo ball event: $e'));
+      emit(
+        state.copyWith(errorMessage: '${MockData.failedToUndoBallEvent}: $e'),
+      );
     }
   }
 
@@ -348,14 +353,14 @@ class AppCubit extends Cubit<AppState> {
           matches: updatedMatches,
           currentMatch: null,
           isLoading: false,
-          successMessage: 'Match completed successfully!',
+          successMessage: MockData.matchCompletedSuccessfully,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to complete match: $e',
+          errorMessage: '${MockData.failedToCompleteMatch}: $e',
         ),
       );
     }
@@ -372,7 +377,7 @@ class AppCubit extends Cubit<AppState> {
       List<PlayerStats> stats;
       if (statsJson.isEmpty) {
         // Load mock data if no stats exist
-        stats = [];
+        stats = MockData.mockPlayerStats;
         await _savePlayerStats(stats);
       } else {
         stats = statsJson
@@ -385,7 +390,7 @@ class AppCubit extends Cubit<AppState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to load player stats: $e',
+          errorMessage: '${MockData.failedToLoadPlayerStats}: $e',
         ),
       );
     }
@@ -405,14 +410,14 @@ class AppCubit extends Cubit<AppState> {
         state.copyWith(
           playerStats: updatedStats,
           isLoading: false,
-          successMessage: 'Player stats updated successfully!',
+          successMessage: MockData.playerStatsUpdatedSuccessfully,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to update player stats: $e',
+          errorMessage: '${MockData.failedToUpdatePlayerStats}: $e',
         ),
       );
     }

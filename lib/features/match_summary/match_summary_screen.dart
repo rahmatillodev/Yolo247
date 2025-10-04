@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yolo247/core/assets/assets.gen.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
@@ -15,20 +16,21 @@ class MatchSummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
-      appBar: AppAppBar(title: 'Match Summary'),
+      appBar: const AppAppBar(title: 'Match Summary'),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
             padding: AppConstants.defaultPadding,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildMatchResult(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildKeyStats(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildBestPlayers(),
-                SizedBox(height: AppConstants.largeSpacing),
-                _buildActionButtons(context),
+                _buildMatchHeader(),
+                SizedBox(height: 20.h),
+                _buildResultSection(),
+                SizedBox(height: 40.h),
+                _buildScoresSection(),
+                SizedBox(height: 50.h),
+                _buildBestPlayersSection(),
               ],
             ),
           ),
@@ -37,116 +39,120 @@ class MatchSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMatchResult() {
+  // 🏟 HEADER WITH BACKGROUND IMAGE AND FLAGS
+  Widget _buildMatchHeader() {
     return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
       decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.darkShadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
+        image: DecorationImage(
+          image: Assets.images.matchBackground.provider(),
+          fit: BoxFit.cover,
+        ),
+        borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Column(
+      padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 20.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Icon(Icons.emoji_events, size: 48.w, color: AppColors.secondary),
-          SizedBox(height: AppConstants.mediumSpacing),
+          _buildTeamFlag(Assets.images.indiaFlag.path, "INDIA"),
           Text(
-            'Team A vs Team B',
-            style: AppFonts.headline5.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: AppFonts.bold,
-            ),
-          ),
-          SizedBox(height: AppConstants.mediumSpacing),
-          Text(
-            'Team A won by 25 runs',
-            style: AppFonts.headline6.copyWith(
-              color: AppColors.success,
-              fontWeight: AppFonts.bold,
-            ),
-          ),
-          SizedBox(height: AppConstants.mediumSpacing),
-          Text(
-            '175/3 - 150/8',
-            style: AppFonts.headline6.copyWith(color: AppColors.primary),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildKeyStats() {
-    return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: AppConstants.largeBorderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.darkShadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Key Statistics',
+            "VS",
             style: AppFonts.subtitle1.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: AppFonts.semiBold,
+              color: Colors.white,
+              fontWeight: AppFonts.bold,
             ),
           ),
-          SizedBox(height: AppConstants.mediumSpacing),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildStatItem('Total Overs', '20.0'),
-              _buildStatItem('Extras', '12'),
-              _buildStatItem('Run Rate', '8.75'),
-            ],
-          ),
+          _buildTeamFlag(Assets.images.team2.path, "AUSTRALIA"),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value) {
+  Widget _buildTeamFlag(String image, String name) {
     return Column(
       children: [
-        Text(
-          value,
-          style: AppFonts.bodyText2.copyWith(color: AppColors.darkTextPrimary),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(1.r),
+          child: Image.asset(
+            image,
+            width: 70.w,
+            height: 40.h,
+            fit: BoxFit.cover,
+          ),
         ),
+        SizedBox(height: 8.h),
         Text(
-          label,
-          style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
+          name,
+          style: AppFonts.subtitle2.copyWith(
+            color: Colors.white,
+            fontWeight: AppFonts.semiBold,
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildBestPlayers() {
+  // 🟢 RESULT SECTION
+  Widget _buildResultSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Result:",
+          style: AppFonts.bodyText2.copyWith(color: AppColors.fieldGreen),
+        ),
+        SizedBox(height: 5.h),
+        Text(
+          "India won by 25 runs",
+          style: AppFonts.subtitle1.copyWith(
+            color: Colors.white,
+            fontWeight: AppFonts.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 🏏 SCORES SECTION
+  Widget _buildScoresSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildScoreCard(
+          team: "India",
+          score: "175/3",
+          overs: "20.0",
+          extras: "12",
+          runRate: "8.75",
+        ),
+        _buildScoreCard(
+          team: "Australia",
+          score: "150/8",
+          overs: "20.0",
+          extras: "8",
+          runRate: "7.50",
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScoreCard({
+    required String team,
+    required String score,
+    required String overs,
+    required String extras,
+    required String runRate,
+  }) {
     return Container(
-      width: double.infinity,
-      padding: AppConstants.defaultPadding,
+      width: 150.w,
+      padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: AppColors.darkSurface,
-        borderRadius: AppConstants.largeBorderRadius,
+        borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
           BoxShadow(
             color: AppColors.darkShadow,
-            blurRadius: 10.r,
-            offset: Offset(0, 5.h),
+            blurRadius: 6,
+            offset: Offset(0, 3.h),
           ),
         ],
       ),
@@ -154,80 +160,110 @@ class MatchSummaryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Best Players',
-            style: AppFonts.subtitle1.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: AppFonts.semiBold,
-            ),
-          ),
-          SizedBox(height: AppConstants.mediumSpacing),
-          _buildPlayerCard(
-            'Best Batsman',
-            'Virat Kohli',
-            '78 runs | 55 balls | SR: 141.82%',
-          ),
-          SizedBox(height: AppConstants.mediumSpacing),
-          _buildPlayerCard(
-            'Best Bowler',
-            'Jasprit Bumrah',
-            '4 wickets | 23 runs | ER: 3.20',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPlayerCard(String title, String name, String stats) {
-    return Container(
-      padding: AppConstants.smallPadding,
-      decoration: BoxDecoration(
-        color: AppColors.accent,
-        borderRadius: AppConstants.smallBorderRadius,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: AppFonts.caption.copyWith(color: AppColors.textSecondary),
-          ),
-          Text(
-            name,
+            team,
             style: AppFonts.subtitle2.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: AppFonts.semiBold,
+              color: Colors.white,
+              fontWeight: AppFonts.bold,
             ),
           ),
+          SizedBox(height: 6.h),
           Text(
-            stats,
-            style: AppFonts.bodyText2.copyWith(color: AppColors.textSecondary),
+            score,
+            style: AppFonts.headline6.copyWith(
+              color: Color(0xffFECF84),
+              fontWeight: AppFonts.bold,
+            ),
+          ),
+          SizedBox(height: 6.h),
+          Text(
+            "Overs: $overs",
+            style: AppFonts.bodyText2.copyWith(color: Colors.white),
+          ),
+          Text(
+            "Extras: $extras",
+            style: AppFonts.bodyText2.copyWith(color: Colors.white),
+          ),
+          Text(
+            "Run Rate: $runRate",
+            style: AppFonts.bodyText2.copyWith(color: Colors.white),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
-    return Row(
+  // 🌟 BEST PLAYERS SECTION
+  Widget _buildBestPlayersSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () => Navigator.pushNamed(context, '/match-history'),
-            child: Text('View History'),
-          ),
+        _buildPlayerCard(
+          title: "Best Batsman",
+          playerName: "Virat Kohli",
+          statLine: "78 Runs | 55 Balls | SR: 141.82%",
         ),
-        SizedBox(width: AppConstants.mediumSpacing),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/home',
-              (route) => false,
-            ),
-            child: Text('Back to Home'),
-          ),
+        SizedBox(height: 15.h),
+        _buildPlayerCard(
+          title: "Best Bowler",
+          playerName: "Jasprit Bumrah",
+          statLine: "4 Wickets | 23 Runs | ER: 3.20",
         ),
       ],
+    );
+  }
+
+  Widget _buildPlayerCard({
+    required String title,
+    required String playerName,
+    required String statLine,
+  }) {
+    return Container(
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: AppColors.darkSurface,
+        borderRadius: BorderRadius.circular(10.r),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.darkShadow,
+            blurRadius: 8,
+            offset: Offset(0, 4.h),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+              SizedBox(width: 8.w),
+              Text(
+                title,
+                style: AppFonts.subtitle2.copyWith(
+                  color: Color(0xffFECF84),
+                  fontWeight: AppFonts.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            playerName,
+            style: AppFonts.subtitle2.copyWith(
+              color: Colors.white,
+              fontWeight: AppFonts.bold,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            statLine,
+            style: AppFonts.bodyText2.copyWith(
+              color: Colors.white,
+              fontWeight: AppFonts.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
