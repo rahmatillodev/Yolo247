@@ -65,7 +65,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                         children: [
                           _buildFlagWithName(
                             widget.match["teamA"],
-                            widget.match["teamAFlag"],
+                            widget.match["imageA"],
                           ),
                           Text(
                             "VS",
@@ -75,7 +75,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                           ),
                           _buildFlagWithName(
                             widget.match["teamB"],
-                            widget.match["teamBFlag"],
+                            widget.match["imageB"],
                           ),
                         ],
                       ),
@@ -175,10 +175,10 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     );
   }
 
-  Widget _buildFlagWithName(String team, AssetGenImage flag) {
+  Widget _buildFlagWithName(String team, String flag) {
     return Column(
       children: [
-        SizedBox(width: 40.w, height: 25.h, child: flag.image()),
+        SizedBox(width: 100.w, height: 50.h, child: Image.network(flag)),
         12.verticalSpace,
         Text(
           team,
@@ -267,7 +267,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
   Widget _buildTableSection({
     required String title,
     required List<String> headers,
-    required List<List<String>> rows,
+    required List<Map<String, dynamic>> rows,
   }) {
     return Container(
       width: double.infinity,
@@ -277,7 +277,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
@@ -288,47 +288,52 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
           8.verticalSpace,
           Table(
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: const {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(1),
-              2: FlexColumnWidth(1),
-              3: FlexColumnWidth(1),
-              4: FlexColumnWidth(1),
-              5: FlexColumnWidth(1),
-            },
+            columnWidths: headers.length == 6
+                ? const {
+                    0: FlexColumnWidth(2),
+                    1: FlexColumnWidth(1),
+                    2: FlexColumnWidth(1),
+                    3: FlexColumnWidth(1),
+                    4: FlexColumnWidth(1),
+                    5: FlexColumnWidth(1),
+                  }
+                : const {
+                    0: FlexColumnWidth(2),
+                    1: FlexColumnWidth(1),
+                    2: FlexColumnWidth(1),
+                    3: FlexColumnWidth(1),
+                    4: FlexColumnWidth(1),
+                  },
             children: [
               TableRow(
-                children: headers
-                    .map(
-                      (h) => Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.h),
-                        child: Text(
-                          h,
-                          textAlign: TextAlign.center,
-                          style: AppFonts.regular12Inter.copyWith(
-                            color: AppColors.textSubc,
-                          ),
-                        ),
+                children: headers.map<Widget>((h) {
+                  final header = h;
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.h),
+                    child: Text(
+                      header,
+                      style: AppFonts.regular12Inter.copyWith(
+                        color: AppColors.textSubc,
                       ),
-                    )
-                    .toList(),
+                    ),
+                  );
+                }).toList(),
               ),
+
               ...rows.map(
                 (r) => TableRow(
-                  children: r
-                      .map(
-                        (cell) => Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4.h),
-                          child: Text(
-                            cell,
-                            textAlign: TextAlign.center,
-                            style: AppFonts.regular12Inter.copyWith(
-                              color: Colors.white.withValues(alpha: 0.85),
-                            ),
-                          ),
+                  children: headers.map<Widget>((h) {
+                    final value = r[h] ?? '';
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4.h),
+                      child: Text(
+                        value.toString(),
+                        style: AppFonts.regular12Inter.copyWith(
+                          color: Colors.white.withValues(alpha: 0.85),
                         ),
-                      )
-                      .toList(),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ],

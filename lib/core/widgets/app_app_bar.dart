@@ -27,7 +27,40 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.elevation,
   });
 
+  /// 🔹 Menyuni ko‘rsatish
   void _showMenu(BuildContext context) {
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+
+    // 🔹 Menyu elementlari ro‘yxati
+    final menuItems = [
+      {"icon": Assets.icons.homeIcon, "label": "Home", "route": Routes.home},
+      {
+        "icon": Assets.icons.newMatchIcon,
+        "label": "New Match",
+        "route": Routes.newMatch,
+      },
+      {
+        "icon": Assets.icons.matchHistory,
+        "label": "Match History",
+        "route": Routes.matchHistory,
+      },
+      {
+        "icon": Assets.icons.team,
+        "label": "Teams",
+        "route": Routes.teamManagement,
+      },
+      {
+        "icon": Assets.icons.playerStatus,
+        "label": "Player Stats",
+        "route": Routes.playerStats,
+      },
+      {
+        "icon": Assets.icons.matchStatus,
+        "label": "Match Summary",
+        "route": Routes.matchSummary,
+      },
+    ];
+
     showDialog(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.5),
@@ -44,58 +77,23 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 child: Material(
                   color: Colors.black,
+                  borderRadius: BorderRadius.circular(16.r),
                   child: Container(
                     width: 220.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildMenuItem(
+                      children: menuItems.map((item) {
+                        final route = item["route"];
+                        final isSelected = currentRoute == route;
+                        return _buildMenuItem(
                           context,
-                          icon: Assets.icons.homeIcon,
-                          label: 'Home',
-                          route: Routes.home,
-                          isSelected: false,
-                        ),
-
-                        _buildMenuItem(
-                          context,
-                          icon: Assets.icons.newMatchIcon,
-                          label: "New Match",
-                          route: Routes.newMatch,
-                          isSelected: false,
-                        ),
-                        _buildMenuItem(
-                          context,
-                          icon: Assets.icons.matchHistory,
-                          label: "Match History",
-                          route: Routes.matchHistory,
-                          isSelected: true,
-                        ),
-                        _buildMenuItem(
-                          context,
-                          icon: Assets.icons.team,
-                          label: "Teams",
-                          route: Routes.teamManagement,
-                          isSelected: false,
-                        ),
-                        _buildMenuItem(
-                          context,
-                          icon: Assets.icons.playerStatus,
-                          label: "Player Stats",
-                          route: Routes.playerStats,
-                          isSelected: false,
-                        ),
-                        _buildMenuItem(
-                          context,
-                          icon: Assets.icons.matchStatus,
-                          label: "Match Summary",
-                          route: Routes.matchSummary,
-                          isSelected: false,
-                        ),
-                      ],
+                          icon: item["icon"] as String,
+                          label: item["label"] as String,
+                          route: route,
+                          isSelected: isSelected,
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),
@@ -107,6 +105,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  /// 🔹 Menyu item builder
   Widget _buildMenuItem(
     BuildContext context, {
     required String icon,
@@ -115,19 +114,19 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     bool isSelected = false,
   }) {
     return InkWell(
+      borderRadius: BorderRadius.circular(10.r),
       onTap: () {
         Navigator.pop(context);
-        if (route != null && !isSelected) {
-          Navigator.pushNamed(context, route);
+        if (route != null && ModalRoute.of(context)?.settings.name != route) {
+          Navigator.pushReplacementNamed(context, route);
         }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.15)
-              : Colors.transparent, // AppColors.primary
-          borderRadius: BorderRadius.circular(10.r),
+              ? AppColors.primary.withValues(alpha: 0.5)
+              : Colors.transparent,
         ),
         child: Row(
           children: [
@@ -136,10 +135,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
             Text(
               label,
               style: AppFonts.bodyText1.copyWith(
-                color: isSelected
-                    ? AppColors.primary
-                    : AppColors
-                          .textWhite, // AppColors.primary / AppColors.textWhite
+                color: AppColors.textWhite,
                 fontWeight: isSelected ? AppFonts.semiBold : AppFonts.regular,
               ),
             ),
@@ -149,12 +145,14 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  /// 🔹 AppBar UI
   @override
   Widget build(BuildContext context) {
     return AppBar(
       elevation: elevation ?? 0,
       automaticallyImplyLeading: false,
       centerTitle: true,
+      backgroundColor: backgroundColor ?? Colors.transparent,
       flexibleSpace: Container(
         decoration: const BoxDecoration(gradient: AppColors.appbarGradient),
       ),
@@ -177,7 +175,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
                   style: AppFonts.bold18Inter.copyWith(
                     color: AppColors.textWhite,
                   ),
-                ), // AppColors.textWhite
+                ),
               ],
             )
           : null,

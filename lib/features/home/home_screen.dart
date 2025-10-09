@@ -100,57 +100,44 @@ class HomeScreen extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // App Title
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Cricket ',
-                      style: TextStyle(
-                        color: AppColors.darkTextPrimary,
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Cricket ',
+                    style: TextStyle(
+                      color: AppColors.darkTextPrimary,
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.bold,
                     ),
-                    TextSpan(
-                      text: 'Score',
-                      style: TextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  TextSpan(
+                    text: 'Score',
+                    style: TextStyle(
+                      color: AppColors.secondary,
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Text(
-                'Counter',
-                style: TextStyle(
-                  color: AppColors.error,
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-
-          // Settings Icon
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.settings,
-              size: 28.w,
-              color: AppColors.primaryLight,
             ),
-          ),
-        ],
+            Text(
+              'Counter',
+              style: TextStyle(
+                color: AppColors.error,
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

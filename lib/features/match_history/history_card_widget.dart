@@ -36,7 +36,7 @@ class HistoryCardWidget extends StatelessWidget {
                   spacing: 4.w,
                   children: [
                     Text(
-                      match["teamA"],
+                      match["teamInfo"][0],
                       style: AppFonts.semibold20Inter.copyWith(
                         color: AppColors.textColor,
                       ),
@@ -48,7 +48,7 @@ class HistoryCardWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      match["teamB"],
+                      match["teamInfo"][1],
                       style: AppFonts.semibold20Inter.copyWith(
                         color: AppColors.textColor,
                       ),
@@ -72,7 +72,12 @@ class HistoryCardWidget extends StatelessWidget {
                     color: AppColors.textSuccess,
                   ),
                 ),
-                Text(match["result"], style: AppFonts.regular16Inter),
+                Text(
+                  match["teamA"] == match["teamB"]
+                      ? "Draw"
+                      : match["teamA"] + " won",
+                  style: AppFonts.regular16Inter,
+                ),
               ],
             ),
             6.verticalSpace,
