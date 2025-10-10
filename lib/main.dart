@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
         return BlocProvider(
           create: (context) => AppCubit(),
           child: MaterialApp(
-            title: 'Yolo247 Cricket Score Counter',
+            title: 'Cricket Score Counter',
             debugShowCheckedModeBanner: false,
             themeMode: ThemeMode.dark,
             initialRoute: Routes.splash,

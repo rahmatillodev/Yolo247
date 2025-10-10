@@ -184,8 +184,9 @@ class Match extends Equatable {
     for (final event in events) {
       totalRuns += event.runs;
       if (event.isWicket) totalWickets++;
-      if (event.ballType == 'wide' || event.ballType == 'no_ball')
+      if (event.ballType == 'wide' || event.ballType == 'no_ball') {
         totalExtras++;
+      }
     }
 
     double overs = _calculateOvers(events.length);

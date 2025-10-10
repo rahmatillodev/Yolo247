@@ -126,7 +126,7 @@ class _NewMatchScreenState extends State<NewMatchScreen> {
       ),
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         iconEnabledColor: AppColors.darkTextPrimary,
         dropdownColor: AppColors.darkSurface,
         decoration: InputDecoration(
